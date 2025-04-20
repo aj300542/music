@@ -1,3 +1,4 @@
+https://aj300542.github.io/music/
 # music
 Over the past century, music recording and appreciation technologies have evolved from phonographs to digital audio devices, undergoing multiple transformations that have made music more portable, high-quality, and deeply integrated into people's lives.
 In 1888, Emile Berliner created the forerunner of modern records (discs) and record players.Vinyl records evolved from shellac to more durable vinyl in the 1930s, with the introduction of the LP format in 1948 improving sound quality and capacity. After its golden age, it declined with the rise of cassettes and CDs but revived in the 21st century for its unique sound and collectible appeal.
