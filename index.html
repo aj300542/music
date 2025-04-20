@@ -38,6 +38,7 @@
             overflow-x: auto;
             background-color: transparent;
         }
+
         .iframe-nixie {
             position: absolute;
             display: flex;
@@ -45,7 +46,7 @@
             align-items: center;
             flex-wrap: nowrap;
             bottom: -0.125vh;
-            width:37vh;
+            width: 37vh;
             height: 10vhh;
             overflow-x: auto;
             background-color: transparent;
@@ -164,8 +165,8 @@
             bottom: 1vh;
             background-color: rgba(0, 0, 0, 0.8);
             color: #999999;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 2vh;
+            border-radius: 1vh;
             z-index: 10;
             align-items: center;
             pointer-events: none;
@@ -179,9 +180,9 @@
 </head>
 
 <body>
-    <div class="iframe-nixie" >
-    <iframe id="nixieframe" src="nixie.html"></iframe>
-</div>
+    <div class="iframe-nixie">
+        <iframe id="nixieframe" src="nixie.html"></iframe>
+    </div>
     <div class="iframe-container" id="iframeContainer">
         <div class="iframe-box" onclick="removeIframe(this)" ondragover="allowDrop(event)" ondrop="drop(event)">
             <iframe id="defaultIframe" src="1888_record.html"></iframe>
@@ -208,6 +209,10 @@
         <div draggable="true" ondragstart="drag(event, '1950s-naqara-cassette.html')"
             onclick="addIframe('1950s-naqara-cassette.html', 'In 1951,Kudelski built his first Nagra tape recorder.The Nagra II-CI, introduced in 1955, is a portable tape recorder equipped with printed circuit boards, a modulometer (a type of VU meter), and a high-frequency erasing head.', '1951年，库德尔斯基制造了他的第一台Nagra磁带录音机。Nagra II-CI于1955年推出，是一款便携式磁带录音机，配备了印刷电路板、模度计（一种VU表）和高频消磁头。')">
             1955
+        </div>
+        <div draggable="true" ondragstart="drag(event, 'cassette_metal.html')"
+            onclick="addIframe('cassette_metal.html', 'The NAGRA SNN is a high-precision mini tape recorder developed by the Kudelski company, initially designed in the early 1960s and officially launched in 1970. Known for its compact design and exceptional audio quality, it was widely used in law enforcement, intelligence agencies, and the film industry. Its body is made of lightweight metal alloy, ensuring high mechanical reliability and audio performance, and supports two tape speeds (9.5 and 4.75 cm/s). Additionally, it features a quartz-driven motor to guarantee recording stability, making it especially suitable for film synchronization recording.', 'NAGRA SNN 是一款由库德尔斯基公司开发的高精度迷你磁带录音机，最初在1960年代早期设计，并于1970年正式投产。它以其小巧的设计和卓越的音质而闻名，广泛应用于执法、情报机构以及电影行业。其机身由轻金属合金制成，具备极高的机械可靠性和音频质量，并支持两种磁带速度（9.5和4.75厘米/秒）。此外，它还配备了石英驱动的电机，确保录音的稳定性，非常适合电影同步录音。')">
+            1962
         </div>
         <div draggable="true" ondragstart="drag(event, '1963-cassette.html')"
             onclick="addIframe('1963-cassette.html', 'In 1963, Philips introduced the compact cassette, significantly enhancing the portability and convenience of audio recording.', '1963年，飞利浦推出了紧凑型盒式磁带，极大提升了音频录制的便携性和使用便利性。它的小巧设计开创了个人音频设备的新时代，并为音乐的传播与共享打开了全新的可能性。')">
@@ -300,6 +305,9 @@
                     break;
                 case '1950s-naqara-cassette.html':
                     description.innerHTML = 'In 1951,Kudelski built his first Nagra tape recorder.The Nagra II-CI, introduced in 1955, is a portable tape recorder equipped with printed circuit boards, a modulometer (a type of VU meter), and a high-frequency erasing head.<br>1951年，库德尔斯基制造了他的第一台Nagra磁带录音机。Nagra II-CI于1955年推出，是一款便携式磁带录音机，配备了印刷电路板、模度计（一种VU表）和高频消磁头。';
+                    break;
+                case 'cassette_metal.html':
+                    description.innerHTML = 'The NAGRA SNN is a high-precision mini tape recorder developed by the Kudelski company, initially designed in the early 1960s and officially launched in 1970. Known for its compact design and exceptional audio quality, it was widely used in law enforcement, intelligence agencies, and the film industry. Its body is made of lightweight metal alloy, ensuring high mechanical reliability and audio performance, and supports two tape speeds (9.5 and 4.75 cm/s). Additionally, it features a quartz-driven motor to guarantee recording stability, making it especially suitable for film synchronization recording.<br>NAGRA SNN 是一款由库德尔斯基公司开发的高精度迷你磁带录音机，最初在1960年代早期设计，并于1970年正式投产。它以其小巧的设计和卓越的音质而闻名，广泛应用于执法、情报机构以及电影行业。其机身由轻金属合金制成，具备极高的机械可靠性和音频质量，并支持两种磁带速度（9.5和4.75厘米/秒）。此外，它还配备了石英驱动的电机，确保录音的稳定性，非常适合电影同步录音。';
                     break;
                 case '1963-cassette.html':
                     description.innerHTML = 'In 1963, Philips introduced the compact cassette, significantly enhancing the portability and convenience of audio recording. Its compact design ushered in a new era of personal audio devices, opening up exciting possibilities for the sharing and enjoyment of music.<br>1963年，飞利浦推出了紧凑型盒式磁带，极大提升了音频录制的便携性和使用便利性。它的小巧设计开创了个人音频设备的新时代，并为音乐的传播与共享打开了全新的可能性。';
