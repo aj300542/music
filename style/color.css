@@ -1,0 +1,63 @@
+
+
+.displaya{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+}
+.wrappera,
+.wrapperb,
+.wrapperc,
+.wrapperd,
+.wrappere,
+.wrapperf {
+    z-index: -1;
+    position: absolute;
+    top: 35vh;
+    height: 30vh;
+    width: 16.5vh;
+    cursor: default;
+    background: red;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #14ffe9, #ffeb3b, #ff00e0);
+    animation: animate 4s linear infinite;
+}
+.wrappera {
+    left: 14.75vw;
+}
+
+.wrapperb {
+    left: 26.75vw;
+}
+
+.wrapperc {
+    left: 39.75vw;
+}
+
+.wrapperd {
+    left: 52.75vw;
+}
+
+.wrappere {
+    left: 65.75vw;
+}
+
+.wrapperf {
+    left: 77.75vw;
+}
+.displaya {
+    z-index: 0;
+    background: #1b1b1b;
+    border-radius: 20px;
+    height: 29.75vh;
+    width: 16.25vh;
+    text-align: center;
+}
+
+@keyframes animate {
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
