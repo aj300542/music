@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vinyl-record</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+            /* 隐藏滚动条 */
+        }
+
+        @font-face {
+            font-family: 'Nixiebold-slim';
+            src: url('fonts/Nixiebold-slim.woff2') format('woff2'),
+                url('fonts/Nixiebold-slim.woff') format('woff'),
+                url('fonts/Nixiebold-slim.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #000000;
+        }
+
+        .vinyl-record {
+            position: absolute;
+            width: 80vh;
+            /* 黑胶唱片的宽度 */
+            height: 80vh;
+            /* 黑胶唱片的高度，保持正圆 */
+            background: radial-gradient(circle,
+                    rgba(100, 100, 100, 1) 5%,
+                    rgba(160, 160, 160, 0.9) 6%,
+                    rgb(65, 65, 65) 8%,
+                    rgba(51, 51, 51, 0.9) 9%,
+                    rgba(100, 100, 100, 1) 11%,
+                    rgba(124, 124, 124, 0.9) 12%,
+                    rgba(8, 8, 8, 0.9) 92%,
+                    rgb(0, 0, 0) 100%);
+            border-radius: 50%;
+            box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.3);
+            animation: spin 30s linear infinite;
+            margin: auto;
+        }
+
+        .vinyl-record-ref {
+            position: absolute;
+            width: 80vh;
+            /* 黑胶唱片的宽度 */
+            height: 80vh;
+            /* 黑胶唱片的高度，保持正圆 */
+            background: conic-gradient(from 0deg,
+                    #000000, #333333, #444444, #666666, #cccccc,
+                    #666666, #bbbbbb, #222222, #444444, #444444,
+                    #666666, #cccccc, #666666, #333333, #555555,
+                    #444444, #bbbbbb, #cccccc, #666666, #dddddd,
+                    #444444, #444444, #666666, #cccccc, #666666,
+                    #aaaaaa, #333333);
+            border-radius: 50%;
+            box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.3);
+            animation: spin 300s linear infinite;
+            margin: auto;
+            mix-blend-mode: screen;
+            opacity: 0.25;
+        }
+
+        .vinyl-record-needle {
+            position: absolute;
+            bottom: 18vh;
+            width: 8vh;
+            height: 4vh;
+            transform: translate(4vh, 0vh);
+            background: linear-gradient(90deg, rgb(0, 0, 0), rgb(54, 54, 54), rgb(29, 29, 29), rgb(88, 88, 88), rgb(0, 0, 0));
+            border-radius: 25%;
+            box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.3);
+            z-index: 99;
+        }
+
+        .vinyl-record-needleA {
+            position: absolute;
+            width: 12vh;
+            height: 1vh;
+            bottom: 1.5vh;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 0.15vh solid #000000;
+            background: linear-gradient(90deg, rgb(0, 0, 0), rgb(61, 61, 61), rgb(19, 19, 19), rgb(73, 73, 73), rgb(0, 0, 0));
+            border-radius: 25%;
+            box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.3);
+            z-index: 99;
+        }
+
+        .vinyl-record-needleB {
+            position: absolute;
+            width: 5vh;
+            height: 1vh;
+            bottom: -1.5vh;
+            border: 0.15vh solid #000000;
+            background: linear-gradient(90deg, rgb(255, 255, 255), rgb(61, 61, 61), rgb(255, 255, 255), rgb(73, 73, 73), rgb(255, 255, 255));
+            border-radius: 25%;
+            box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.3);
+            clip-path: polygon(100% 0%, 0% 50%, 100% 100%);
+            opacity: 0.75;
+            z-index: 1;
+            /* 应用摩斯密码动画，周期 9 秒 */
+            animation: morseMusic 6s linear infinite;
+        }
+
+        @keyframes morseMusic {
+
+            /* M: dash, gap, dash, gap */
+            0% {
+                transform: translateX(0.125vh);
+            }
+
+            /* dash */
+            6.67% {
+                transform: translateX(0.125vh);
+            }
+
+            8.89% {
+                transform: translateX(0);
+            }
+
+            /* gap */
+            15.56% {
+                transform: translateX(0.125vh);
+            }
+
+            /* dash */
+            22.22% {
+                transform: translateX(0);
+            }
+
+            /* letter gap */
+
+            /* U: dot, gap, dot, gap, dash, gap */
+            24.44% {
+                transform: translateX(-0.125vh);
+            }
+
+            /* dot */
+            26.67% {
+                transform: translateX(-0.125vh);
+            }
+
+            28.89% {
+                transform: translateX(0);
+            }
+
+            /* gap */
+            31.11% {
+                transform: translateX(-0.125vh);
+            }
+
+            /* dot */
+            37.78% {
+                transform: translateX(-0.125vh);
+            }
+
+            44.21% {
+                transform: translateX(0);
+            }
+
+            /* gap */
+            44.22% {
+                transform: translateX(0.125vh);
+            }
+
+            /* dash */
+            46.67% {
+                transform: translateX(0.125vh);
+            }
+
+            48.89% {
+                transform: translateX(0);
+            }
+
+            /* gap */
+
+            /* S: dot, gap, dot, gap, dot, gap */
+            51.11% {
+                transform: translateX(-0.125vh);
+            }
+
+            /* dot */
+            53.33% {
+                transform: translateX(-0.125vh);
+            }
+
+            55.56% {
+                transform: translateX(0);
+            }
+
+            /* gap */
+            55.57% {
+                transform: translateX(-0.125vh);
+            }
+
+            /* dot */
+            57.78% {
+                transform: translateX(-0.125vh);
+            }
+
+            60.00% {
+                transform: translateX(0);
+            }
+
+            /* gap */
+            60.01% {
+                transform: translateX(-0.125vh);
+            }
+
+            /* dot */
+            62.22% {
+                transform: translateX(-0.125vh);
+            }
+
+            62.23% {
+                transform: translateX(0);
+            }
+
+            /* letter gap */
+
+            /* I: dot, gap, dot, gap */
+            64.44% {
+                transform: translateX(-0.125vh);
+            }
+
+            /* dot */
+            66.67% {
+                transform: translateX(-0.125vh);
+            }
+
+            68.89% {
+                transform: translateX(0);
+            }
+
+            /* gap */
+            68.90% {
+                transform: translateX(-0.125vh);
+            }
+
+            /* dot */
+            75.56% {
+                transform: translateX(-0.125vh);
+            }
+
+            75.57% {
+                transform: translateX(0);
+            }
+
+            /* letter gap */
+
+            /* C: dash, gap, dot, gap, dash, gap, dot */
+            82.22% {
+                transform: translateX(0.125vh);
+            }
+
+            /* dash */
+            84.44% {
+                transform: translateX(0.125vh);
+            }
+
+            86.67% {
+                transform: translateX(0);
+            }
+
+            /* gap */
+            86.68% {
+                transform: translateX(-0.125vh);
+            }
+
+            /* dot */
+            88.89% {
+                transform: translateX(-0.125vh);
+            }
+
+            95.56% {
+                transform: translateX(0);
+            }
+
+            /* gap */
+            95.57% {
+                transform: translateX(0.125vh);
+            }
+
+            /* dash */
+            97.78% {
+                transform: translateX(0.125vh);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .vinyl-record-needleC {
+            position: absolute;
+            width: 3vh;
+            height: 1vh;
+            bottom: -2vh;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 0.15vh solid #000000;
+            background: linear-gradient(90deg, rgb(0, 0, 0), rgb(61, 61, 61), rgb(19, 19, 19), rgb(73, 73, 73), rgb(0, 0, 0));
+            border-radius: 25%;
+            box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.3);
+            z-index: 99;
+        }
+
+        .vinyl-record-tubeA {
+            position: absolute;
+            width: 20vh;
+            height: 10vh;
+            bottom: 1.75vh;
+            left: 3vh;
+            background: radial-gradient(circle at 50% 0, #000000 0%, #111111 12.5%, #1a1a1a 25%, #a3a3a3 37.5%, #a1a1a1 50%, #080808 62.5%, #5a5a5a 75%, #a1a1a1 87.5%, #000000 100%);
+            border-top-left-radius: 0vh;
+            border-top-right-radius: 0vh;
+            border-bottom-left-radius: 50vh;
+            border-bottom-right-radius: 50vh;
+            box-shadow: 0 0.5vh 2vh rgba(0, 0, 0, 0.3);
+            rotate: 180deg;
+            opacity: 0.2;
+        }
+
+        .vinyl-record-tubeB {
+            position: absolute;
+            width: 10vh;
+            height: 15vh;
+            bottom: -13.25vh;
+            left: 13vh;
+            background: linear-gradient(270deg, #000000 0%, #020202 12.5%, #6e6e6e 25%, #a3a3a3 37.5%, #a1a1a1 50%, #303030 62.5%, #161616 75%, #000000 87.5%, #000000 100%);
+            box-shadow: 0 0.5vh 2vh rgba(0, 0, 0, 0.3);
+            opacity: 0.2;
+        }
+
+        .vinyl-record-center {
+            position: relative;
+            width: 2.5vh;
+            height: 2.5vh;
+            background: rgb(0, 0, 0);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 99;
+        }
+
+        .vinyl-record-black {
+            position: absolute;
+            width: 85vh;
+            /* 黑胶唱片的宽度 */
+            height: 85vh;
+            /* 黑胶唱片的高度，保持正圆 */
+            background: radial-gradient(circle,
+                    #0f0f0f 97%,
+                    /* 黑边部分 */
+                    #575757 100%);
+            border-radius: 50%;
+            box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.3);
+            animation: spin 30s linear infinite;
+            /* 添加旋转动画 */
+        }
+
+        .rotating-lp {
+            width: 80.125vh;
+            height: 80.125vh;
+            background: linear-gradient(135deg, rgb(0, 0, 0), rgb(6, 45, 151), rgba(99, 56, 112, 1), rgb(66, 8, 61));
+            border-radius: 50%;
+            position: relative;
+            animation: spin 3s linear infinite;
+            opacity: 1;
+            mix-blend-mode: multiply;
+            text-align: center;
+            /* 水平居中 */
+            line-height: 8vh;
+            /* 垂直居中 */
+            letter-spacing: 0.5vh;
+            color: rgb(112, 112, 112);
+            white-space: nowrap;
+            z-index: 9;
+        }
+
+        .vinyl-record::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: repeating-radial-gradient(circle,
+                    transparent 0,
+                    transparent 0.125vh,
+                    white 0.125vh,
+                    white 0.5vh);
+            z-index: 2;
+            /* 确保白线位于表面 */
+            opacity: 0.05;
+        }
+
+        .vinyl-record::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 35vh;
+            /* 红色标签的宽度 + 黑色带宽度 */
+            height: 35vh;
+            background: radial-gradient(circle, #000000 98%, transparent 100%);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 3;
+            opacity: 0.5;
+        }
+
+        .red-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 28vh;
+            /* 红色标签的宽度 */
+            height: 28vh;
+            background: radial-gradient(circle, #af1010 60%, #990000 90%, #660000 100%);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 10;
+            opacity: 0.75;
+        }
+
+        .center-hole {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2vh;
+            height: 2vh;
+            background: #ffffff;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 5;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .logo-year {
+            position: absolute;
+            bottom: 40vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgb(209, 209, 209);
+            font-family: 'Nixiebold-slim', Arial, sans-serif;
+            color: rgb(255, 255, 255);
+            font-size: 1.5vh;
+            letter-spacing: 0.5vh;
+            /* 增加字符之间的间距 */
+            opacity: 0.75;
+            z-index: 99;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="vinyl-record-black"></div>
+    <div class="vinyl-record">
+        <div class="vinyl-record-ref"></div>
+        <div class="rotating-lp">
+        </div>
+        <div class="red-label">
+            <div class="vinyl-record-center"></div>
+        </div>
+        <div class="center-hole"></div>
+    </div>
+    <div class="vinyl-record-needle">
+        <div class="vinyl-record-needleB"></div>
+        <div class="vinyl-record-needleC"></div>
+        <div class="vinyl-record-needleA">
+            <div class="vinyl-record-tubeA"></div>
+            <div class="vinyl-record-tubeB"></div>
+        </div>
+    </div>
+    <div class="logo-year">1888</div>
+</body>
+
+</html>

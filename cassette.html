@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>复古录音带</title>
+  <style>
+    ::-webkit-scrollbar {
+      display: none;
+      /* 隐藏滚动条 */
+    }
+
+    @font-face {
+      font-family: 'Nixiebold-slim';
+      src: url('fonts/Nixiebold-slim.woff2') format('woff2'),
+        url('fonts/Nixiebold-slim.woff') format('woff'),
+        url('fonts/Nixiebold-slim.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .cassette {
+      position: absolute;
+      width: 50vh;
+      height: 31vh;
+      background: #333;
+      border-radius: 1vh;
+      box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.5);
+      padding: 1vh;
+      z-index: -2;
+    }
+
+    .label {
+      position: absolute;
+      top: 4.5vh;
+      left: 50%;
+      width: 42vh;
+      height: 2vh;
+      background: #ff6600;
+      border-radius: 0.5vh;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.5vh;
+      letter-spacing: 0.2vh;
+    }
+
+    /* 卷盘和中心孔 */
+    .reel {
+      position: absolute;
+      top: 9.5vh;
+      width: 8vh;
+      height: 8vh;
+      background: #555;
+      border: 0.5vh solid #b6b1ae;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .reel.left {
+      left: 8vh;
+    }
+
+    .reel.right {
+      right: 8vh;
+    }
+
+    .center-hole {
+      position: absolute;
+      width: 5.5vh;
+      height: 5.5vh;
+      background: #333;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+
+    /* 装饰性旋转矩形 */
+    .rectangles {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 6vh;
+      height: 10vh;
+      animation: rotate 5s linear infinite;
+    }
+
+    .rectangle-group {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .rectangle {
+      position: absolute;
+      width: 1vh;
+      height: 4vh;
+      background: #b6b1ae;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -100%);
+      transform-origin: bottom center;
+    }
+
+    .rectangle:nth-child(1) {
+      transform: translate(-50%, -100%) rotate(0deg);
+    }
+
+    .rectangle:nth-child(2) {
+      transform: translate(-50%, -100%) rotate(60deg);
+    }
+
+    .rectangle:nth-child(3) {
+      transform: translate(-50%, -100%) rotate(120deg);
+    }
+
+    .rectangle:nth-child(4) {
+      transform: translate(-50%, -100%) rotate(180deg);
+    }
+
+    .rectangle:nth-child(5) {
+      transform: translate(-50%, -100%) rotate(240deg);
+    }
+
+    .rectangle:nth-child(6) {
+      transform: translate(-50%, -100%) rotate(300deg);
+    }
+
+    @keyframes rotate {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    /* 磁带窗口 */
+    .tape-window {
+      position: absolute;
+      top: 10vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18vh;
+      height: 8vh;
+      border: 0.5vh solid rgba(109, 109, 109, 0.5);
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 0.5vh;
+      box-sizing: border-box;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .tape-roll {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, #301e02 5%, #381b00 50%);
+    }
+
+    .tape-roll.left {
+      width: 26vh;
+      height: 26vh;
+      left: calc(-4vh - 13vh);
+      top: calc(4vh - 13vh);
+      animation: swapLeft 120s linear infinite alternate;
+    }
+
+    .tape-roll.right {
+      width: 12vh;
+      height: 12vh;
+      left: calc(22vh - 6vh);
+      top: calc(4vh - 6vh);
+      animation: swapRight 120s linear infinite alternate;
+    }
+
+    @keyframes swapLeft {
+      from {
+        width: 26vh;
+        height: 26vh;
+        left: calc(-4vh - 13vh);
+        top: calc(4vh - 13vh);
+      }
+
+      to {
+        width: 12vh;
+        height: 12vh;
+        left: calc(-4vh - 6vh);
+        top: calc(4vh - 6vh);
+      }
+    }
+
+    @keyframes swapRight {
+      from {
+        width: 12vh;
+        height: 12vh;
+        left: calc(22vh - 6vh);
+        top: calc(4vh - 6vh);
+      }
+
+      to {
+        width: 26vh;
+        height: 26vh;
+        left: calc(22vh - 13vh);
+        top: calc(4vh - 13vh);
+      }
+    }
+
+    /* 复合图形（两个圆+长方形） */
+    .composite-shape {
+      position: absolute;
+      top: 8.5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40vh;
+      height: 11vh;
+      z-index: -1;
+    }
+
+    .composite-shape .comp-circle {
+      position: absolute;
+      width: 11vh;
+      height: 11vh;
+      background: black;
+      border-radius: 50%;
+    }
+
+    .composite-shape .comp-circle.left {
+      left: 1vh;
+    }
+
+    .composite-shape .comp-circle.right {
+      right: 1vh;
+    }
+
+    .composite-shape .comp-rect {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 29vh;
+      height: 11vh;
+      background: black;
+    }
+
+    /* 在 composite-shape 下层增加一个粉灰色长方形 */
+    .under-rect {
+      position: absolute;
+      top: 3vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 45vh;
+      height: 22vh;
+      border-radius: 1vh;
+      background: linear-gradient(to bottom,
+          #F5F5DC 0%,
+          #F5F5DC 33.33%,
+          #7e9fa1 33.33%,
+          #7e9fa1 66.66%,
+          #926f40 66.66%,
+          #926f40 100%);
+      z-index: -2;
+    }
+
+    /* 增加四个银色圆形，分别位于 .cassette 的四角 */
+    .corner-circle {
+      position: absolute;
+      width: 2vh;
+      height: 2vh;
+      background: rgb(99, 99, 99);
+      border-radius: 50%;
+      z-index: 3;
+      border: 0.2vh solid #000000;
+    }
+
+    .corner-circle.top-left {
+      top: 0.5vh;
+      left: 0.5vh;
+    }
+
+    .corner-circle.top-right {
+      top: 0.5vh;
+      right: 0.5vh;
+    }
+
+    .corner-circle.bottom-left {
+      bottom: 0.5vh;
+      left: 0.5vh;
+    }
+
+    .corner-circle.bottom-right {
+      bottom: 0.5vh;
+      right: 0.5vh;
+    }
+
+    .corner-circle.center {
+      bottom: 3vh;
+      left: 25vh;
+    }
+
+    .hole-circle {
+      position: absolute;
+      width: 2vh;
+      height: 2vh;
+      background: rgb(0, 0, 0);
+      border-radius: 50%;
+      z-index: 3;
+      border: 0.2vh solid #000000;
+    }
+
+    .hole-circle.top-left {
+      bottom: 1.5vh;
+      left: 17vh;
+    }
+
+    .hole-circle.top-right {
+      bottom: 1.5vh;
+      right: 17vh;
+    }
+
+    .hole-circle.bottom-left {
+      bottom: 0.5vh;
+      left: 10vh;
+    }
+
+    .hole-circle.bottom-right {
+      bottom: 0.5vh;
+      right: 10vh;
+    }
+
+    .trapezoid {
+      position: absolute;
+      bottom: 0vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40vh;
+      height: 7vh;
+      background: #424242;
+      clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 100%);
+
+    }
+
+    .trapezoid2 {
+      position: absolute;
+      bottom: 0vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 38vh;
+      height: 6vh;
+      background: #3a3a3a;
+      clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 100%);
+
+    }
+
+    .details {
+      position: absolute;
+      bottom: 8.5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #000000;
+      font-size: 2.2vh;
+      letter-spacing: 0.2vh;
+      text-align: center;
+      z-index: 2;
+    }
+    .logo-year {
+      position: absolute;
+      bottom: 0.5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgb(209, 209, 209);
+      font-family: 'Nixiebold-slim', Arial, sans-serif;
+      color: rgb(255, 255, 255);
+      font-size: 1.5vh;
+      letter-spacing: 0.5vh;
+      /* 增加字符之间的间距 */
+      opacity: 0.75;
+      z-index: 99;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="cassette">
+    <div class="logo-year">1963</div>
+    <div class="label">Stereo | Mono | Dolby | CrO2 | A | 90</div>
+    <!-- 四个银色圆形，位于cassette四角 -->
+    <div class="corner-circle top-left"></div>
+    <div class="corner-circle top-right"></div>
+    <div class="corner-circle bottom-left"></div>
+    <div class="corner-circle bottom-right"></div>
+    <div class="corner-circle center"></div>
+    <div class="hole-circle top-left"></div>
+    <div class="hole-circle top-right"></div>
+    <div class="hole-circle bottom-left"></div>
+    <div class="hole-circle bottom-right"></div>
+    <div class="reel left">
+      <div class="rectangles">
+        <div class="rectangle-group">
+          <div class="rectangle"></div>
+          <div class="rectangle"></div>
+          <div class="rectangle"></div>
+          <div class="rectangle"></div>
+          <div class="rectangle"></div>
+          <div class="rectangle"></div>
+        </div>
+      </div>
+      <div class="center-hole"></div>
+    </div>
+    <div class="reel right">
+      <div class="rectangles">
+        <div class="rectangle-group">
+          <div class="rectangle"></div>
+          <div class="rectangle"></div>
+          <div class="rectangle"></div>
+          <div class="rectangle"></div>
+          <div class="rectangle"></div>
+          <div class="rectangle"></div>
+        </div>
+      </div>
+      <div class="center-hole"></div>
+    </div>
+    <div class="tape-window">
+      <div class="tape-roll left"></div>
+      <div class="tape-roll right"></div>
+    </div>
+    <div class="composite-shape">
+      <div class="comp-circle left"></div>
+      <div class="comp-rect"></div>
+      <div class="comp-circle right"></div>
+    </div>
+    <div class="under-rect"></div>
+    <div class="trapezoid"></div>
+    <div class="trapezoid2"></div>
+    <div class="details">---C-------------90---</div>
+  </div>
+</body>
+
+</html>

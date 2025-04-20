@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cassette</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+            /* 隐藏滚动条 */
+        }
+
+        @font-face {
+            font-family: 'Nixiebold-slim';
+            src: url('fonts/Nixiebold-slim.woff2') format('woff2'),
+                url('fonts/Nixiebold-slim.woff') format('woff'),
+                url('fonts/Nixiebold-slim.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .cassette {
+            position: absolute;
+            width: 40vh;
+            height: 80vh;
+            background: #494f50;
+            border-radius: 1vh;
+            box-shadow: 0 0.5vh 5vh rgba(0, 0, 0, 0.5);
+            padding: 1vh;
+            z-index: -2;
+        }
+
+        .bottom-label {
+            position: absolute;
+            top: 40vh;
+            left: 9.5vh;
+            width: 5vh;
+            height: 5vh;
+            border-radius: 50%;
+            background: #777777;
+            border: 0.125vh solid #a3a3a3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5vh;
+            letter-spacing: 0.2vh;
+            box-shadow: inset 1vh 1vh 2vh rgba(0, 0, 0, 0.3),
+                1vh 1vh 3vh rgba(0, 0, 0, 1);
+        }
+
+        /* 卷盘和中心孔 */
+        .reel {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%);
+            width: 30vh;
+            height: 30vh;
+            background: #000000;
+            border: 3vh solid #b6b1ae;
+            border-radius: 50%;
+            overflow: hidden;
+            opacity: 0.5;
+            mix-blend-mode: screen;
+            z-index: 9;
+            
+        }
+
+        .reel.left {
+            top: 1vh;
+        }
+
+        .reel.right {
+            bottom: 1vh;
+        }
+
+        .reel-center {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%);
+            width: 8vh;
+            height: 8vh;
+            background: #808080;
+            border: 0.15vh solid #b6b1ae;
+            border-radius: 50%;
+            overflow: hidden;
+            z-index: 9;
+        }
+
+        .reel-center.left {
+            top: 15vh;
+        }
+
+        .reel-center.right {
+            bottom: 15vh;
+        }
+
+        .center-hole {
+            position: absolute;
+            width: 12vh;
+            height: 12vh;
+            background: #b6b1ae;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+        .center-hole2 {
+            position: absolute;
+            width: 13vh;
+            height: 13vh;
+            background: #4d4d4d;
+            border: 1.5vh solid #b6b1ae;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+        /* 装饰性旋转矩形 */
+        .rectangles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6vh;
+            height: 10vh;
+            animation: rotate 5s linear infinite;
+        }
+
+        .rectangle-group {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .rectangle {
+            position: absolute;
+            width: 6vh;
+            height: 17vh;
+            background: #b6b1ae;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            transform-origin: bottom center;
+        }
+
+        .rectangle:nth-child(1) {
+            transform: translate(-50%, -100%) rotate(0deg);
+        }
+
+        .rectangle:nth-child(2) {
+            transform: translate(-50%, -100%) rotate(120deg);
+        }
+
+        .rectangle:nth-child(3) {
+            transform: translate(-50%, -100%) rotate(240deg);
+        }
+        .rectangle-group2 {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .rectangle2 {
+            position: absolute;
+            width: 4vh;
+            height: 17vh;
+            background: #b6b1ae;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            transform-origin: bottom center;
+        }
+
+        .rectangle2:nth-child(1) {
+            transform: translate(-30%, -100%) rotate(0deg);
+        }
+
+        .rectangle2:nth-child(2) {
+            transform: translate(-50%, -100%) rotate(80deg);
+        }
+
+        .rectangle2:nth-child(3) {
+            transform: translate(-50%, -100%) rotate(120deg);
+        }
+        .rectangle2:nth-child(4) {
+            transform: translate(-50%, -100%) rotate(200deg);
+        }
+
+        .rectangle2:nth-child(5) {
+            transform: translate(-50%, -100%) rotate(240deg);
+        }
+
+        .rectangle2:nth-child(6) {
+            transform: translate(-50%, -100%) rotate(320deg);
+        }
+        @keyframes rotate {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* 磁带窗口 */
+        .tape-window {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40vh;
+            height: 80vh;
+            border: 0.5vh solid rgba(109, 109, 109, 0.5);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 0.5vh;
+            box-sizing: border-box;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .tape-roll {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, #774a01 5%, #381b00 50%);
+            opacity: 1;
+            box-shadow:
+            1vh 1vh 3vh rgba(0, 0, 0, 1);
+        }
+
+        /* 修改后的磁带轮：左侧 */
+        .tape-roll.left {
+            /* 固定中心为 reel.left 的中心 (50%, 16vh) */
+            left: 50%;
+            top: 17.5vh;
+            transform: translate(-50%, -50%);
+            /* 初始尺寸：较大的磁带轮 */
+            width: 26vh;
+            height: 26vh;
+            animation: swapLeft 120s linear infinite alternate;
+        }
+
+        /* 修改后的磁带轮：右侧 */
+        .tape-roll.right {
+            /* 固定中心为 reel.right 的中心 (50%, 64vh) */
+            left: 50%;
+            top: 61.5vh;
+            transform: translate(-50%, -50%);
+            /* 初始尺寸：较小的磁带轮 */
+            width: 12vh;
+            height: 12vh;
+            animation: swapRight 120s linear infinite alternate;
+        }
+
+        /* 动画仅改变尺寸，保持中心不变 */
+        @keyframes swapLeft {
+            from {
+                width: 26vh;
+                height: 26vh;
+            }
+
+            to {
+                width: 12vh;
+                height: 12vh;
+            }
+        }
+
+        @keyframes swapRight {
+            from {
+                width: 12vh;
+                height: 12vh;
+            }
+
+            to {
+                width: 26vh;
+                height: 26vh;
+            }
+        }
+
+        /* 复合图形（两个圆+长方形） */
+        .composite-shape {
+            position: absolute;
+            top: 2vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40vh;
+            height: 11vh;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        .composite-shape .comp-circle {
+            position: absolute;
+            width: 11vh;
+            height: 11vh;
+            background: black;
+            border-radius: 50%;
+        }
+
+        .composite-shape .comp-circle.left {
+            left: 1vh;
+        }
+
+        .composite-shape .comp-circle.right {
+            right: 1vh;
+        }
+
+        .composite-shape .comp-rect {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 29vh;
+            height: 11vh;
+            background: black;
+        }
+
+        /* 在 composite-shape 下层增加一个粉灰色长方形 */
+        .under-rect {
+            position: absolute;
+            top: 37.5vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 9vh;
+            height: 4.5vh;
+            border-radius: 1vh;
+            background: linear-gradient(to bottom,
+                    #F5F5DC 0%,
+                    #F5F5DC 33.33%,
+                    #7e9fa1 33.33%,
+                    #7e9fa1 66.66%,
+                    #926f40 66.66%,
+                    #926f40 100%);
+            z-index: -2;
+            rotate: -15deg;
+            box-shadow:
+                1vh 1vh 3vh rgba(0, 0, 0, 1);
+        }
+
+        /* 增加四个银色圆形，分别位于 .cassette 的四角 */
+        .corner-circle {
+            position: absolute;
+            width: 2vh;
+            height: 2vh;
+            background: rgb(99, 99, 99);
+            border-radius: 50%;
+            z-index: 3;
+            border: 0.2vh solid #000000;
+        }
+
+        .corner-circle.top-left {
+            top: 0.5vh;
+            left: 0.5vh;
+        }
+
+        .corner-circle.top-right {
+            top: 0.5vh;
+            right: 0.5vh;
+        }
+
+        .corner-circle.bottom-left {
+            bottom: 0.5vh;
+            left: 0.5vh;
+        }
+
+        .corner-circle.bottom-right {
+            bottom: 0.5vh;
+            right: 0.5vh;
+        }
+
+        .hole-circle {
+            position: absolute;
+            width: 2vh;
+            height: 2vh;
+            background: rgb(63, 63, 63);
+            border-radius: 50%;
+            z-index: 3;
+            border: 0.2vh solid #000000;
+            box-shadow: inset 1vh 1vh 2vh rgba(0, 0, 0, 0.3),
+            0.5vh 0.5vh 1vh rgba(0, 0, 0, 1);
+        }
+
+        .hole-circle.top-left {
+            bottom: 31vh;
+            left: 4vh;
+        }
+
+        .hole-circle.top-right {
+            bottom: 31vh;
+            right: 4vh;
+        }
+
+        .hole-circle.bottom-left {
+            bottom: 42vh;
+            left: 6vh;
+        }
+
+        .hole-circle.bottom-right {
+            bottom: 42vh;
+            right: 6vh;
+        }
+
+        .trapezoid {
+            position: absolute;
+            bottom: 37.5vh;
+            right: 6.5vh;
+            border-radius: 50%;
+            border: 0.125vh solid #868686;
+            transform: translateX(-50%);
+            width: 5vh;
+            height: 5vh;
+            background: linear-gradient(135deg, rgb(255, 255, 255), rgb(172, 172, 172), rgb(61, 61, 61));
+            box-shadow: inset 1vh 1vh 2vh rgba(0, 0, 0, 0.3),
+            1vh 1vh 3vh rgba(0, 0, 0, 1);
+        }
+
+        .trapezoid2 {
+            position: absolute;
+            bottom: 0vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 38vh;
+            height: 6vh;
+            background: #3a3a3a;
+            clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 100%);
+
+        }
+
+        .details {
+            position: absolute;
+            bottom: 2.5vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #000000;
+            font-size: 2.2vh;
+            letter-spacing: 0.2vh;
+            text-align: center;
+            z-index: 2;
+            white-space: nowrap;
+        }
+
+        .logo-year {
+            position: absolute;
+            bottom: 18vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgb(209, 209, 209);
+            font-family: 'Nixiebold-slim', Arial, sans-serif;
+            color: rgb(255, 255, 255);
+            font-size: 1.5vh;
+            letter-spacing: 0.5vh;
+            /* 增加字符之间的间距 */
+            opacity: 0.75;
+            z-index: 99;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cassette">
+        <div class="logo-year">1955</div>
+        <div class="bottom-label"></div>
+        <!-- 四个银色圆形，位于cassette四角 -->
+        <div class="corner-circle top-left"></div>
+        <div class="corner-circle top-right"></div>
+        <div class="corner-circle bottom-left"></div>
+        <div class="corner-circle bottom-right"></div>
+        <div class="hole-circle top-left"></div>
+        <div class="hole-circle top-right"></div>
+        <div class="hole-circle bottom-left"></div>
+        <div class="hole-circle bottom-right"></div>
+        <div class="reel left">
+            <div class="rectangles">
+                <div class="rectangle-group">
+                    <div class="rectangle"></div>
+                    <div class="rectangle"></div>
+                    <div class="rectangle"></div>
+                </div>
+            </div>
+            <div class="center-hole"></div>
+        </div>
+        <div class="reel right">
+            <div class="rectangles">
+                <div class="rectangle-group2">
+                    <div class="rectangle2"></div>
+                    <div class="rectangle2"></div>
+                    <div class="rectangle2"></div>
+                    <div class="rectangle2"></div>
+                    <div class="rectangle2"></div>
+                    <div class="rectangle2"></div>
+                </div>
+            </div>
+            <div class="center-hole2"></div>
+        </div>
+        <div class="reel-center left"></div>
+        <div class="reel-center right"></div>
+        <div class="tape-window">
+            <div class="tape-roll left"></div>
+            <div class="tape-roll right"></div>
+        </div>
+        <div class="composite-shape">
+            <div class="comp-circle left"></div>
+            <div class="comp-rect"></div>
+            <div class="comp-circle right"></div>
+        </div>
+        <div class="under-rect"></div>
+        <div class="trapezoid"></div>
+        <div class="trapezoid2"></div>
+        <div class="details">Kudelski Nagra II-CI</div>
+    </div>
+</body>
+
+</html>

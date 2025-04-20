@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>md mz-1</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+            /* 隐藏滚动条 */
+        }
+
+        @font-face {
+            font-family: 'Nixiebold-slim';
+            src: url('fonts/Nixiebold-slim.woff2') format('woff2'),
+                url('fonts/Nixiebold-slim.woff') format('woff'),
+                url('fonts/Nixiebold-slim.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(0, 0, 0);
+            /* 网页背景色，用于镂空效果显示 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+
+        .walkman {
+            width: 38vh;
+            height: 45vh;
+            background: linear-gradient(135deg, #292929, #464646);
+            border-radius: 1vh;
+            box-shadow: inset 1vh 1vh 2vh rgba(0, 0, 0, 0.6),
+                3vh 3vh 5vh rgba(0, 0, 0, 0.3);
+            position: absolute;
+        }
+
+        .walkmanb {
+            width: 22.5vh;
+            height: 22.5vh;
+            background: linear-gradient(135deg, #464646);
+            border-radius: 2vh;
+            position: absolute;
+            left: 3vh;
+            top: 6vh;
+            box-shadow: inset 5vh 5vh 5vh rgba(230, 230, 230, 0.2),
+                3vh 3vh 5vh rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .walkmanb-fill {
+            width: 100%;
+            height: 100%;
+            background: black;
+            -webkit-mask: url(#window-hole-mask);
+            mask: url(#window-hole-mask);
+            -webkit-mask-type: luminance;
+            mask-type: luminance;
+        }
+
+        .walkmanw {
+            width: 4vh;
+            height: 4vh;
+            background: linear-gradient(135deg, #dddddd, #9e9e93);
+            border-radius: 0.5vh;
+            position: absolute;
+            right: 3vh;
+            top: 3vh;
+            opacity: 0.5;
+        }
+
+        .cassette-window {
+            position: absolute;
+            top: 2vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 18vh;
+            height: 7vh;
+            border: 1vh solid #303030;
+            border-radius: 0.5vh;
+            background: linear-gradient(180deg, #cc8e31, rgb(150, 97, 0));
+            box-shadow: inset 3vh 3vh 4vh rgb(235, 195, 117);
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .cassette-window iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            transform: none;
+            z-index: 99;
+            scale: 1500%;
+            opacity: 0.5;
+            /* 如有需要，可调整 z-index */
+        }
+
+        .cassette-fill {
+            width: 100%;
+            height: 100%;
+            background: black;
+            -webkit-mask: url(#window-hole-mask);
+            mask: url(#window-hole-mask);
+            -webkit-mask-type: luminance;
+            mask-type: luminance;
+        }
+
+        .logo {
+            position: absolute;
+            top: 15vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgb(119, 119, 119);
+            font-size: 3vh;
+            font-weight: bold;
+        }
+
+        .logo-year {
+            position: absolute;
+            bottom: 0.75vh;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Nixiebold-slim', Arial, sans-serif;
+            color: rgb(255, 255, 255);
+            font-size: 1.5vh;
+            letter-spacing: 0.5vh;
+            opacity: 0.75;
+            z-index: 99;
+        }
+
+        .logoA {
+            position: absolute;
+            top: 12vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgb(209, 209, 209);
+            font-size: 2vh;
+            font-weight: bold;
+        }
+
+        .logoB {
+            position: absolute;
+            top: 19vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgb(255, 0, 0);
+            font-size: 0.75vh;
+            font-weight: bold;
+        }
+
+        .logoC {
+            position: absolute;
+            top: 20.5vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgb(209, 209, 209);
+            font-size: 0.75vh;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .logoD {
+            position: absolute;
+            top: 8vh;
+            right: 0.5vh;
+            transform: translateX(-50%);
+            color: rgb(209, 209, 209);
+            font-size: 0.75vh;
+            font-weight: bold;
+            white-space: pre-line;
+        }
+
+        .logoE {
+            position: absolute;
+            top: 12vh;
+            right: 1vh;
+            transform: translateX(-50%);
+            color: rgb(209, 209, 209);
+            font-size: 0.75vh;
+            font-weight: bold;
+            white-space: pre-line;
+        }
+
+        .logoF {
+            position: absolute;
+            top: 16.5vh;
+            right: 1.25vh;
+            transform: translateX(-50%);
+            color: rgb(209, 209, 209);
+            font-size: 0.75vh;
+            font-weight: bold;
+            white-space: pre-line;
+        }
+
+        .logoG {
+            position: absolute;
+            bottom: 8.5vh;
+            right: 6.75vh;
+            transform: translateX(-50%);
+            color: rgb(209, 209, 209);
+            font-size: 0.75vh;
+            font-weight: bold;
+            white-space: pre-line;
+        }
+
+        .logoH {
+            position: absolute;
+            bottom: 1.5vh;
+            right: 1vh;
+            color: rgb(209, 209, 209);
+            font-size: 0.75vh;
+            font-weight: bold;
+            white-space: pre-line;
+        }
+
+        .button {
+            width: 2vh;
+            height: 2vh;
+            background: orange;
+            border: 0.3vh solid #a5a5a5;
+            border-radius: 0.1vh;
+            position: absolute;
+            top: 19vh;
+            transform: translateX(-50%), translateY(-50%);
+            left: 18.5vh;
+            opacity: 0.5;
+        }
+
+        .CA-button-B {
+            width: 4vh;
+            height: 2vh;
+            background: linear-gradient(180deg, #a0a0a0, #6e6e6e, #a0a0a0);
+            border: 0.15vh solid #a5a5a5;
+            border-radius: 25%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0.5vh 0.5vh 1.55vh rgba(207, 207, 207, 0.2),
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.6);
+            display: flex;
+            /* 使用Flexbox */
+            justify-content: center;
+            /* 水平居中 */
+            align-items: center;
+            /* 垂直居中 */
+            letter-spacing: 0vh;
+            color: rgb(66, 66, 66);
+            white-space: nowrap;
+        }
+
+
+        .CA-button-B-hole {
+            width: 6vh;
+            height: 4vh;
+            background: linear-gradient(180deg, #000000, #7c7c7c);
+            position: absolute;
+            border-radius: 25%;
+        }
+
+        .CD-button-C-hole {
+            width: 22.5vh;
+            height: 2vh;
+            background: linear-gradient(180deg, #000000, #7c7c7c);
+            position: absolute;
+            border-radius: 1vh;
+        }
+
+        .CA {
+            width: 12vh;
+            height: 24vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            position: absolute;
+            bottom: 3vh;
+            right: -4.5vh;
+        }
+
+        .CB {
+            width: 12vh;
+            height: 24vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            position: absolute;
+            bottom: -2.5vh;
+            right: -4.5vh;
+            scale: 75%;
+        }
+
+        .CC {
+            width: 12vh;
+            height: 24vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            position: absolute;
+            bottom: -7.5vh;
+            right: -4.5vh;
+            scale: 75%;
+        }
+
+        .CD,
+        .CE,
+        .CF,
+        .CG {
+            width: 12vh;
+            height: 24vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            position: absolute;
+        }
+
+        .CD {
+            left: 3vh;
+            bottom: -7.5vh;
+        }
+
+        .CE {
+            left: 3vh;
+            bottom: -2.5vh;
+        }
+
+        .CF {
+            right: 1vh;
+            bottom: 8vh;
+            transform: scaleX(0.33);
+        }
+
+        .CG {
+            right: 1vh;
+            bottom: 12vh;
+            transform: scaleX(0.33);
+        }
+
+        .CFA,
+        .CGA {
+            width: 8vh;
+            height: 4vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            position: absolute;
+        }
+
+        .CFA {
+            right: 1.2vh;
+            top: 19.75vh;
+        }
+
+        .CGA {
+            right: 1.2vh;
+            top: 23.8vh;
+        }
+
+        .CFA-button,
+        .CGA-button {
+            width: 2.5vh;
+            height: 1vh;
+            background: linear-gradient(180deg, #a0a0a0, #6e6e6e, #a0a0a0);
+            border: 0.15vh solid #a5a5a5;
+            border-radius: 25%;
+            position: absolute;
+            box-shadow: inset 0.5vh 0.5vh 1.55vh rgba(207, 207, 207, 0.2),
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.6);
+            display: flex;
+            /* 使用Flexbox */
+            justify-content: center;
+            /* 水平居中 */
+            align-items: center;
+            /* 垂直居中 */
+            letter-spacing: 0vh;
+            color: rgb(66, 66, 66);
+            white-space: nowrap;
+        }
+
+        .CFA-button {
+            right: 2vh;
+            top: 20.5vh;
+        }
+
+        .CGA-button {
+            right: 2vh;
+            top: 24.5vh;
+        }
+
+        .CFB-button,
+        .CGB-button {
+            width: 2.5vh;
+            height: 1vh;
+            background: linear-gradient(180deg, #a0a0a0, #6e6e6e, #a0a0a0);
+            border: 0.15vh solid #a5a5a5;
+            border-radius: 25%;
+            position: absolute;
+            box-shadow: inset 0.5vh 0.5vh 1.55vh rgba(207, 207, 207, 0.2),
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.6);
+            display: flex;
+            /* 使用Flexbox */
+            justify-content: center;
+            /* 水平居中 */
+            align-items: center;
+            /* 垂直居中 */
+            letter-spacing: 0vh;
+            color: rgb(66, 66, 66);
+            white-space: nowrap;
+        }
+
+        .CFB-button {
+            right: 5.5vh;
+            top: 20.5vh;
+        }
+
+        .CGB-button {
+            right: 5.5vh;
+            top: 24.5vh;
+        }
+
+        .CFA.rec,
+        .CGA.rec {
+            box-shadow: inset 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+            scale: 75%;
+            display: flex;
+            /* Flexbox for centering */
+            font-family: Arial, sans-serif;
+            font-size: 2vh;
+            justify-content: center;
+            /* Horizontal centering */
+            align-items: center;
+            /* Vertical centering */
+            letter-spacing: 0.1vh;
+            /* Add slight spacing */
+            color: rgb(112, 112, 112);
+            white-space: nowrap;
+            z-index: 5;
+        }
+
+        .CDD,
+        .CEE,
+        .CDT,
+        .CET {
+            width: 22vh;
+            height: 24vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            position: absolute;
+            left: 3vh;
+            gap: 0vh;
+        }
+
+        .CFF,
+        .CGG {
+            width: 22vh;
+            height: 24vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            position: absolute;
+            bottom: -13.5vh;
+
+        }
+
+        .CDD {
+            bottom: -13.5vh;
+        }
+
+        .CEE {
+            bottom: -18.5vh;
+        }
+
+        .CFF {
+            bottom: -5vh;
+            left: 27vh;
+        }
+
+        .CGG {
+            height: 12vh;
+            right: -15vh;
+            bottom: 26vh;
+        }
+
+        .CDT {
+            bottom: -0.75vh;
+            display: flex;
+            align-items: center;
+            gap: 1vh;
+            /* 控制间距 */
+        }
+
+        .CET {
+            bottom: -5.75vh;
+            display: flex;
+            align-items: center;
+            gap: 1vh;
+            /* 控制间距 */
+
+        }
+
+        .CDT .text,
+        .CET .text {
+            scale: 75%;
+            display: flex;
+            /* 使用Flexbox */
+            justify-content: center;
+            /* 水平居中 */
+            align-items: center;
+            /* 垂直居中 */
+            color: rgb(156, 156, 156);
+            white-space: nowrap;
+            font-family: monospace;
+            /* 使用等宽字体 */
+            text-align: center;
+            gap: 1vh;
+            line-height: 1.5;
+            /* Adjust vertical alignment */
+            padding: 0.1em;
+            /* Add spacing for better alignment */
+
+        }
+
+        .CET .text:nth-child(5) {
+            font-size: 0.1em;
+            /* Adjust the size to match other characters */
+        }
+
+        .CDD .circle,
+        .CEE .circle {
+            width: 4vh;
+            height: 2vh;
+            background: linear-gradient(1800deg, #1a1a1a, #3b3b3b);
+            border-radius: 50%;
+            box-shadow: inset 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+            scale: 75%;
+            display: flex;
+            /* 使用Flexbox */
+            justify-content: center;
+            /* 水平居中 */
+            align-items: center;
+            /* 垂直居中 */
+            letter-spacing: 0vh;
+            color: rgb(156, 156, 156);
+            white-space: nowrap;
+
+        }
+
+        .CFF-hole {
+            width: 2vh;
+            height: 2vh;
+            background: linear-gradient(180deg, #000000, #7c7c7c);
+            position: absolute;
+            border-radius: 1vh;
+        }
+
+        .CFF .circle,
+        .CGG .circle {
+            width: 2vh;
+            height: 2vh;
+            background: linear-gradient(1800deg, #1a1a1a, #3b3b3b);
+            border-radius: 50%;
+            box-shadow: inset 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+            scale: 75%;
+        }
+
+        .CGG .circle {
+            border: 0.15vh solid #000000;
+            background: linear-gradient(1800deg, #1a1a1a, #5c5c5c);
+
+        }
+    </style>
+</head>
+
+<body>
+    <!-- SVG mask 定义：整个区域白色，再在中间绘制较大的黑色区域作为镂空 -->
+    <svg width="0" height="0">
+        <defs>
+            <mask id="window-hole-mask" maskUnits="objectBoundingBox">
+                <rect x="0" y="0" width="1" height="1" fill="white" />
+                <!-- 此处设为 cassette-window 及 walkmanb 内部镂空区域，左右各留 10% -->
+                <rect x="0.1" y="0.1" width="0.8" height="0.8" fill="black" />
+            </mask>
+        </defs>
+    </svg>
+    <div class="walkman">
+        <div class="logo-year">1992</div>
+        <div class="walkmanb">
+            <div class="walkmanb-fill"></div>
+            <div class="cassette-window">
+                <iframe src="walkman-play.html"></iframe>
+                <div class="cassette-fill"></div>
+            </div>
+            <div class="logoA">-MZ-1-</div>
+            <div class="logo">MD</div>
+            <div class="logoB">DIGITAL RECORDING</div>
+            <div class="logoC">MINIDISC PORTABLE RECORDER MZ-1</div>
+            <div class="button"></div>
+        </div>
+        <div class="walkmanw"></div>
+        <div class="CA">
+            <div class="CA-button-B-hole">
+                <div class="CA-button-B">&#9654</div>
+            </div>
+        </div>
+        <div class="CB">
+            <div class="CA-button-B-hole">
+                <div class="CA-button-B">&#9208</div>
+            </div>
+        </div>
+        <div class="CC">
+            <div class="CA-button-B-hole">
+                <div class="CA-button-B">&#9209</div>
+            </div>
+        </div>
+        <div class="CD">
+            <div class="CD-button-C-hole"></div>
+        </div>
+        <div class="CE">
+            <div class="CD-button-C-hole"> </div>
+        </div>
+        <div class="CF">
+            <div class="CD-button-C-hole"> </div>
+        </div>
+        <div class="CG">
+            <div class="CD-button-C-hole"> </div>
+        </div>
+        <div class="logoD">TRACK
+            NAME</div>
+        <div class="logoE">DISC
+            NAME</div>
+        <div class="logoF">DATE</div>
+        <div class="logoG">ENTER/
+            REPEAT</div>
+        <div class="logoH">STOP/CHARGE</div>
+        <div class="CDD">
+            <div class="circle">1</div>
+            <div class="circle">2</div>
+            <div class="circle">3</div>
+            <div class="circle">4</div>
+            <div class="circle">5</div>
+        </div>
+        <div class="CEE">
+            <div class="circle">6</div>
+            <div class="circle">7</div>
+            <div class="circle">8</div>
+            <div class="circle">9</div>
+            <div class="circle">0</div>
+        </div>
+        <div class="CDT">
+            <div class="text">ABC</div>
+            <div class="text">DEF</div>
+            <div class="text">GHI</div>
+            <div class="text">JKL</div>
+            <div class="text">MNO</div>
+        </div>
+        <div class="CET">
+            <div class="text">PQR</div>
+            <div class="text">STU</div>
+            <div class="text">VWX</div>
+            <div class="text">YZ&nbsp;</div>
+            <div class="text">_&#9251;</div>
+        </div>
+        <div class="CFF">
+            <div class="CFF-hole">
+                <div class="circle"> </div>
+            </div>
+        </div>
+        <div class="CGG">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+        <div class="CFA-button"></div>
+        <div class="CGA-button"></div>
+        <div class="CFB-button"></div>
+        <div class="CGB-button"></div>
+        <div class="CFA">
+            <div class="rec">&#9198;</div>
+            <div class="rec">&#9197;</div>
+        </div>
+        <div class="CGA">
+            <div class="rec">&#9198;</div>
+            <div class="rec">&#9197;</div>
+        </div>
+</body>
+
+</html>

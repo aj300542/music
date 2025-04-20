@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cd d-50</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+            /* 隐藏滚动条 */
+        }
+
+        @font-face {
+            font-family: 'Nixiebold-slim';
+            src: url('fonts/Nixiebold-slim.woff2') format('woff2'),
+                url('fonts/Nixiebold-slim.woff') format('woff'),
+                url('fonts/Nixiebold-slim.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(0, 0, 0);
+            /* 网页背景色，用于镂空效果显示 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+
+        .walkman {
+            width: 41vh;
+            height: 47vh;
+            background: linear-gradient(135deg, #292929, #2e2e2e);
+            border-radius: 1vh;
+            box-shadow: inset 0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.6),
+                3vh 3vh 5vh rgba(0, 0, 0, 0.0);
+            position: relative;
+        }
+
+        .walkmanb {
+            width: 38vh;
+            height: 38vh;
+            background: linear-gradient(135deg, #292929, #2e2e2e);
+            border-radius: 50%;
+            border: 0.5vh solid #696969;
+            position: absolute;
+            left: 1.25vh;
+            top: 1.25vh;
+            box-shadow: inset 5vh 5vh 5vh rgba(230, 230, 230, 0.2),
+                3vh 3vh 5vh rgba(65, 65, 65, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .walkmanb-window {
+            width: 38.75vh;
+            height: 38.75vh;
+            background: linear-gradient(135deg, #0a0a0a, #000000);
+            border-radius: 50%;
+            position: absolute;
+            left: 1.25vh;
+            top: 1.25vh;
+            position: absolute;
+            overflow: hidden;
+            rotate: 45deg;
+            clip-path: polygon(0% 100%, 50% 50%, 100% 100%);
+        }
+
+        .inner-circle {
+            width: 20vh;
+            /* 圆形的直径 */
+            height: 20vh;
+            background: rgb(129, 129, 129);
+            /* 圆形的颜色 */
+            border-radius: 50%;
+            border: 0.5vh solid #696969;
+            /* 确保是圆形 */
+            position: absolute;
+            top: 50%;
+            /* 定位到窗口的中心 */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* 精确居中 */
+        }
+
+        .rotating-cd {
+            width: 37vh;
+            height: 37vh;
+            background: linear-gradient(135deg, rgb(0, 0, 0), rgb(6, 45, 151), rgba(99, 56, 112, 1), rgba(109, 55, 55, 1));
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: spin 3s linear infinite;
+            opacity: 0.4;
+            text-align: center;
+            /* 水平居中 */
+            line-height: 8vh;
+            /* 垂直居中 */
+            letter-spacing: 0.5vh;
+            color: rgb(112, 112, 112);
+            white-space: nowrap;
+        }
+
+        .arc-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .walkmanb-fill {
+            width: 100%;
+            height: 100%;
+            background: black;
+            -webkit-mask: url(#window-hole-mask);
+            mask: url(#window-hole-mask);
+            -webkit-mask-type: luminance;
+            mask-type: luminance;
+        }
+
+        .walkmans {
+            width: 41vh;
+            height: 4vh;
+            background: linear-gradient(180deg, #2c2c2c, #000000);
+            position: absolute;
+            bottom: 0vh;
+            box-shadow: inset 5vh 5vh 5vh rgba(230, 230, 230, 0.2),
+                3vh 3vh 5vh rgba(65, 65, 65, 0.5);
+        }
+
+        .walkmansb {
+            width: 41vh;
+            height: 0.75vh;
+            background: linear-gradient(135deg, #272727, #000000);
+            position: absolute;
+            bottom: 3.25vh;
+        }
+
+        .walkmanw {
+            width: 0;
+            height: 0;
+            border-left: 13vh solid transparent;
+            border-right: 0vh solid transparent;
+            border-bottom: 13vh solid #1a1a1a;
+            /* 填充三角形颜色 */
+            position: absolute;
+            right: 0vh;
+            bottom: 4vh;
+            opacity: 0.5;
+        }
+
+        .walkmanw1 {
+            width: 0;
+            height: 0;
+            border-left: 12vh solid transparent;
+            border-right: 0vh solid transparent;
+            border-bottom: 12vh solid #494949;
+            /* 填充三角形颜色 */
+            position: absolute;
+            border-radius: 1vh;
+            right: 0vh;
+            bottom: 4vh;
+            opacity: 0.5;
+        }
+
+        .walkmanw1-b {
+            width: 0;
+            height: 0;
+            border-left: 9vh solid transparent;
+            border-right: 0vh solid transparent;
+            border-bottom: 9vh solid #000000;
+            /* 填充三角形颜色 */
+            position: absolute;
+            border-radius: 0.5vh;
+            right: 0.75vh;
+            bottom: 4.75vh;
+            opacity: 0.5;
+        }
+
+        .walkmanw1-w {
+            width: 0;
+            height: 0;
+            border-left: 7.5vh solid transparent;
+            border-right: 0vh solid transparent;
+            border-bottom: 7.5vh solid #494949;
+            /* 填充三角形颜色 */
+            position: absolute;
+            border-radius: 0.5vh;
+            right: 1.25vh;
+            bottom: 5.25vh;
+            opacity: 0.5;
+        }
+
+        .cassette-window {
+            position: absolute;
+            bottom: 0.25vh;
+            left: 15%;
+            transform: translateX(-50%);
+            width: 8vh;
+            height: 2.5vh;
+            border: 0.25vh solid #303030;
+            border-radius: 0.5vh;
+            background: linear-gradient(180deg, #cc8e31, rgb(112, 74, 3));
+            box-shadow: inset 0.5vh 0.5vh 1vh rgb(235, 195, 117);
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .cassette-window iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            transform: none;
+            z-index: 99;
+            scale: 1500%;
+            opacity: 0.5;
+            /* 如有需要，可调整 z-index */
+        }
+
+        .cassette-fill {
+            width: 100%;
+            height: 100%;
+            background: black;
+            -webkit-mask: url(#window-hole-mask);
+            mask: url(#window-hole-mask);
+            -webkit-mask-type: luminance;
+            mask-type: luminance;
+        }
+
+        .logo {
+            position: absolute;
+            top: 17.5vh;
+            left: 5vh;
+            color: rgb(182, 182, 182);
+            font-size: 3vh;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+        .logo-year {
+            position: absolute;
+            bottom: 4vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgb(209, 209, 209);
+            font-family: 'Nixiebold-slim', Arial, sans-serif;
+            color: rgb(255, 255, 255);
+            font-size: 1.5vh;
+            letter-spacing: 0.5vh;
+            /* 增加字符之间的间距 */
+            opacity: 0.75;
+            z-index: 99;
+        }
+
+        .logo-open {
+            position: absolute;
+            bottom: 6.5vh;
+            right: 2vh;
+            color: rgb(182, 182, 182);
+            font-size: 1.25vh;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+        .logoA {
+            position: absolute;
+            top: 1.5vh;
+            left: 1.5vh;
+            color: rgb(209, 209, 209);
+            font-size: 2vh;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+        .logoB {
+            position: absolute;
+            top: 4.5vh;
+            right: 1vh;
+            color: rgb(190, 59, 59);
+            font-size: 0.55vh;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+        .logoC {
+            position: absolute;
+            top: 19.5vh;
+            left: 10vh;
+            color: rgb(209, 209, 209);
+            font-size: 0.75vh;
+            font-weight: bold;
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .hollow-text {
+            position: absolute;
+            top: 19.5vh;
+            left: 21vh;
+            font-size: 5vh;
+            color: transparent;
+            -webkit-text-stroke: 1px rgb(209, 209, 209);
+            z-index: 3;
+        }
+
+        .logoD {
+            position: absolute;
+            top: 20.25vh;
+            left: 25vh;
+            color: rgb(209, 209, 209);
+            font-size: 1vh;
+            font-weight: bold;
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .logoE {
+            position: absolute;
+            top: 24.5vh;
+            left: 21vh;
+            color: rgb(209, 209, 209);
+            font-size: 1vh;
+            font-weight: bold;
+            letter-spacing: 0.125vh;
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .logoF {
+            position: absolute;
+            top: 22.5vh;
+            left: 12vh;
+            color: rgb(209, 209, 209);
+            font-size: 2vh;
+            font-weight: bold;
+            letter-spacing: 0vh;
+            white-space: nowrap;
+            opacity: 0.3;
+            z-index: 9;
+        }
+
+        .button {
+            width: 3vh;
+            height: 3vh;
+            background: rgb(143, 30, 30);
+            border: 0.1vh solid #a5a5a5;
+            border-radius: 0.1vh;
+            position: absolute;
+            top: 1vh;
+            right: 1vh;
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        .button-play {
+            width: 8.75vh;
+            height: 3vh;
+            background: linear-gradient(135deg, #dadada, rgb(110, 110, 110));
+            border: 0.1vh solid #4b4b4b;
+            border-radius: 0.1vh;
+            position: relative;
+            top: 0.75vh;
+            left: 20.5vh;
+            opacity: 0.5;
+            text-align: center;
+            /* 水平居中 */
+            line-height: 3vh;
+            /* 垂直居中 */
+            letter-spacing: 0.5vh;
+            color: rgb(112, 112, 112);
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .button-privew {
+            width: 5vh;
+            height: 1.5vh;
+            background: linear-gradient(135deg, #dadada, rgb(110, 110, 110));
+            border: 0.1vh solid #4b4b4b;
+            border-radius: 0.1vh;
+            position: absolute;
+            top: 0.75vh;
+            left: 29.5vh;
+            opacity: 0.5;
+            text-align: center;
+            /* 水平居中 */
+            line-height: 1.5vh;
+            /* 垂直居中 */
+            letter-spacing: 0.5vh;
+            color: rgb(112, 112, 112);
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .button-next {
+            width: 5vh;
+            height: 1.5vh;
+            background: linear-gradient(135deg, #dadada, rgb(110, 110, 110));
+            border: 0.1vh solid #4b4b4b;
+            border-radius: 0.1vh;
+            position: absolute;
+            top: 0.75vh;
+            left: 34.5vh;
+            opacity: 0.5;
+            text-align: center;
+            /* 水平居中 */
+            line-height: 1.5vh;
+            /* 垂直居中 */
+            letter-spacing: 0.5vh;
+            color: rgb(112, 112, 112);
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .button-stop {
+            width: 10vh;
+            height: 1.5vh;
+            background: linear-gradient(135deg, #dadada, rgb(110, 110, 110));
+            border: 0.1vh solid #4b4b4b;
+            border-radius: 0.1vh;
+            position: absolute;
+            top: 2.25vh;
+            left: 29.5vh;
+            opacity: 0.5;
+            text-align: center;
+            /* 水平居中 */
+            line-height: 1.5vh;
+            /* 垂直居中 */
+            letter-spacing: 0.5vh;
+            color: rgb(112, 112, 112);
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .button-hold {
+            width: 1.25vh;
+            height: 3vh;
+            background: linear-gradient(135deg, #dadada, rgb(110, 110, 110));
+            border: 0.1vh solid #4b4b4b;
+            border-radius: 0.1vh;
+            position: absolute;
+            top: 0.75vh;
+            left: 39.75vh;
+            opacity: 0.5;
+            text-align: center;
+            /* 水平居中 */
+            line-height: 1.5vh;
+            /* 垂直居中 */
+            letter-spacing: 0.5vh;
+            color: rgb(112, 112, 112);
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .CA-button-B {
+            width: 4vh;
+            height: 2vh;
+            background: linear-gradient(180deg, #535353, #000000, #535353);
+            border: 0.15vh solid #303030;
+            border-radius: 0%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0.5vh 0.5vh 1.55vh rgba(207, 207, 207, 0.2),
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.6);
+        }
+
+        .CA-button-B-hole {
+            width: 5vh;
+            height: 3vh;
+            background: linear-gradient(180deg, #000000, #7c7c7c);
+            position: absolute;
+            border-radius: 0%;
+        }
+
+        .CD-button-C-hole {
+            width: 22.5vh;
+            height: 2vh;
+            background: linear-gradient(180deg, #000000, #7c7c7c);
+            position: absolute;
+            border-radius: 1vh;
+        }
+
+        .CB {
+            width: 5vh;
+            height: 3vh;
+            position: absolute;
+            bottom: 0vh;
+            left: 11.5vh;
+            scale: 50%;
+        }
+
+        .CC {
+            width: 5vh;
+            height: 3vh;
+            position: absolute;
+            bottom: 0vh;
+            left: 15.5vh;
+            scale: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- SVG mask 定义：整个区域白色，再在中间绘制较大的黑色区域作为镂空 -->
+    <svg width="0" height="0">
+        <defs>
+            <mask id="window-hole-mask" maskUnits="objectBoundingBox">
+                <rect x="0" y="0" width="1" height="1" fill="white" />
+                <!-- 此处设为 cassette-window 及 walkmanb 内部镂空区域，左右各留 10% -->
+                <rect x="0.1" y="0.1" width="0.8" height="0.8" fill="black" />
+            </mask>
+        </defs>
+    </svg>
+    <div class="walkman">
+        <div class="logoA">-D-50-</div>
+        <div class="logo">CD</div>
+        <div class="logo-year">1984</div>
+        <div class="logo-open">OPEN</div>
+        <div class="logoB">IT IS MUSIC</div>
+        <div class="logoC">COMPACT PLAYER</div>
+        <div class="hollow-text">disc</div>
+        <div class="logoD">OMPACT</div>
+        <div class="logoE">DIGITAL AUDIO</div>
+        <div class="logoF">DIGITAL</div>
+        <div class="button"></div>
+        <div class="walkmanb"></div>
+        <div class="walkmanb-window">
+            <div class="inner-circle"></div>
+            <div class="rotating-cd">
+                <svg class="arc-text" width="300" height="300" viewBox="0 0 300 300">
+                    <!-- 圆弧路径 -->
+                    <path id="arc-path" d="M 10,150 A 140,140 0 1,1 290,150" fill="none"></path>
+
+                    <!-- 沿圆弧排列的文字 -->
+                    <text fill="rgb(112, 112, 112)" font-size="14" letter-spacing="1">
+                        <textPath href="#arc-path" startOffset="50%" text-anchor="middle">
+                            IT IS MUSIC
+                        </textPath>
+                    </text>
+                </svg>
+            </div>
+        </div>
+        <div class="walkmanb-fill"></div>
+        <div class="cassette-window">
+            <iframe src="walkman-play.html"></iframe>
+            <div class="cassette-fill"></div>
+        </div>
+        <div class="walkmans">
+            <div class="button-play">&#9654 &#9208</div>
+            <div class="button-privew">&#9198</div>
+            <div class="button-next">&#9197</div>
+            <div class="button-stop">&#9209</div>
+            <div class="button-hold"></div>
+        </div>
+        <div class="walkmansb"></div>
+        <div class="walkmanw"></div>
+        <div class="walkmanw1"></div>
+        <div class="walkmanw1-b"></div>
+        <div class="walkmanw1-w"></div>
+        <div class="CB">
+            <div class="CA-button-B-hole">
+                <div class="CA-button-B"></div>
+            </div>
+        </div>
+        <div class="CC">
+            <div class="CA-button-B-hole">
+                <div class="CA-button-B"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

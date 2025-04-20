@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regency Model TR-1</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        @font-face {
+            font-family: 'Nixiebold-slim';
+            src: url('fonts/Nixiebold-slim.woff2') format('woff2'),
+                url('fonts/Nixiebold-slim.woff') format('woff'),
+                url('fonts/Nixiebold-slim.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(0, 0, 0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .parent {
+            position: relative;
+            width: 35vh;
+            /* Match width of the walkman */
+            height: 57.5vh;
+            /* Match height of the walkman */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .walkman {
+            width: 35vh;
+            height: 57.5vh;
+            background: linear-gradient(135deg, #ecddb3, #bea77c);
+            border-radius: 1vh;
+            position: absolute;
+            box-shadow: inset 0.5vh 0.5vh 1vh rgba(230, 230, 230, 0.6),
+                3vh 3vh 5vh rgba(0, 0, 0, 0.3),
+                -1vh -1vh 2vh rgba(255, 255, 255, 0.05);
+        }
+
+        .walkman.hover-effect~*,
+        .walkman.hover-effect,
+        .walkman.hover-effect .walkmanB,
+        .walkman.hover-effect .trapezoid2,
+        .walkman.hover-effect .button,
+        .walkman.hover-effect .walkmans,
+        .walkman.hover-effect .button-stop,
+        .walkman.hover-effect .button-color {
+            background: linear-gradient(135deg, #911212, #550000);
+            color: #FFF;
+            box-shadow: inset 0.5vh 0.5vh 1vh rgba(192, 101, 101, 0.6),
+                3vh 3vh 5vh rgba(85, 0, 0, 0.3),
+                -1vh -1vh 2vh rgba(139, 0, 0, 0.1);
+            border-color: #550000;
+        }
+
+        .walkmanB {
+            width: 36vh;
+            height: 58.5vh;
+            background: linear-gradient(135deg, #ecddb3, #bea77c);
+            border-radius: 1.5vh;
+            position: absolute;
+            opacity: 0.5;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .walkmanb-cell {
+            width: 33vh;
+            height: 33vh;
+            bottom: 1vh;
+            left: 50%;
+            transform: translate(-50%);
+            background: transparent;
+            position: absolute;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            grid-template-rows: repeat(15, 1fr);
+            gap: 0.6vh;
+            /* 让单元格之间有间距 */
+        }
+
+        .cell {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-sizing: border-box;
+            background:
+                repeating-linear-gradient(0deg,
+                    rgba(146, 120, 73, 0.8),
+                    rgba(146, 120, 73, 0.8) 0.25vh,
+                    rgba(48, 38, 20, 0.8) 0.5vh),
+                repeating-linear-gradient(90deg,
+                    rgba(146, 120, 73, 0.5),
+                    rgba(146, 120, 73, 0.5) 0.25vh,
+                    rgba(48, 38, 20, 0.5) 0.5vh);
+            box-shadow: inset 0.5vh 0.15vh 0.3vh rgba(54, 47, 26, 0.2);
+        }
+
+
+        .walkmans {
+            width: 9vh;
+            height: 3vh;
+            background: linear-gradient(135deg, #d3c5a0, #bea77c);
+            left: 2vh;
+            position: relative;
+            top: 3.5vh;
+            box-shadow: inset 5vh 5vh 5vh rgba(230, 230, 230, 0.2),
+                3vh 3vh 5vh rgba(65, 65, 65, 0.5);
+        }
+
+        .button-stop {
+            width: 7vh;
+            height: 1.5vh;
+            background: linear-gradient(90deg, #9b9b9b, rgb(112, 112, 112), #979797, rgb(0, 0, 0));
+            border: 0.25vh solid #000000;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+        }
+
+        .button-color {
+            width: 6.5vh;
+            height: 1vh;
+            background: linear-gradient(to right,
+                    #d3c5a0 0%,
+                    #bea77c 11.11%,
+                    #d3c5a0 11.11%,
+                    #bea77c 22.22%,
+                    #d3c5a0 22.22%,
+                    #bea77c 33.33%,
+                    #d3c5a0 33.33%,
+                    #bea77c 44.44%,
+                    #d3c5a0 44.44%,
+                    #bea77c 55.55%,
+                    #d3c5a0 55.55%,
+                    #bea77c 66.66%,
+                    #d3c5a0 66.66%,
+                    #bea77c 77.77%,
+                    #d3c5a0 77.77%,
+                    #bea77c 88.88%,
+                    #d3c5a0 88.88%,
+                    #bea77c 100%);
+
+            border: 0.25vh solid #6b6b6b;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 1;
+            z-index: 3;
+        }
+
+        .logoA {
+            position: absolute;
+            transform: translateX(-50%);
+            width: 12vh;
+            height: 4vh;
+            top: 11vh;
+            left: 7vh;
+            border-radius: 0.25vh;
+            font-family: monospace;
+            color: rgb(0, 54, 9);
+            font-size: 2.8vh;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            letter-spacing: 0vh;
+            white-space: nowrap;
+            opacity: 0.5;
+        }
+
+        .logo-year {
+            position: absolute;
+            top: 16vh;
+            left: 7vh;
+            transform: translateX(-50%);
+            color: rgb(0, 54, 9);
+            font-family: 'Nixiebold-slim', Arial, sans-serif;
+            font-size: 1.5vh;
+            letter-spacing: 0.5vh;
+            /* 增加字符之间的间距 */
+            opacity: 0.75;
+            z-index: 99;
+        }
+
+        .button {
+            width: 4vh;
+            height: 1.75vh;
+            background: rgb(194, 2, 2);
+            box-shadow: inset 0.25vh 0.25vh 0.5vh rgba(53, 53, 53, 0.8),
+                0.25vh 0.25vh 0.5vh rgb(0, 0, 0, 0);
+            border-radius: 0.1vh;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9;
+        }
+
+        .button-hole {
+            width: 5vh;
+            height: 2.75vh;
+            background: linear-gradient(180deg, #ffffff, #7c7c7c);
+            border-radius: 0.1vh;
+            position: absolute;
+            top: 3.6vh;
+            left: 2.5vh;
+            z-index: 99;
+            scale: 15%;
+            rotate: 90deg;
+        }
+
+        .button-hold2 {
+            width: 0.5vh;
+            height: 2.5vh;
+            background: linear-gradient(135deg, #927849, #927849);
+            position: absolute;
+            top: 0.5vh;
+            right: 11.75vh;
+        }
+
+        .container {
+            position: relative;
+            /* 保证内容相对定位 */
+            width: 20vh;
+            height: 20vh;
+            border-radius: 50%;
+            top: -16.75vh;
+            right: -5.5vh;
+            overflow: hidden;
+        }
+
+        .metal {
+            width: 20vh;
+            /* 按钮大小 */
+            height: 20vh;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg,
+                    #6e5e00, #a38600, #ffd700, #ffdd33, #fff8dc,
+                    #ffdd33, #ffcc00, #3b3b3b, #8b6900, #ffd700,
+                    #ffdd33, #fff8dc, #ffdd33, #615200, #8a7200,
+                    #ffd700, #ffcc33, #fff8dc, #ffdd33, #ffe4a1,
+                    #635400, #ffd700, #ffdd33, #fff8dc, #ffdd33,
+                    #a09100, #6e5e00);
+            /* 原金色渐变 */
+            box-shadow:
+                inset 0 1vh 1vh rgba(255, 255, 255, 0.5),
+                /* 内部高光 */
+                inset 0 -1vh 3vh rgba(0, 0, 0, 0.5);
+            /* 内部阴影 */
+            position: relative;
+            /* 避免伪类溢出 */
+        }
+
+        .metal::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150%;
+            /* 覆盖整个按钮 */
+            height: 150%;
+            /* 覆盖整个按钮 */
+            border-radius: 50%;
+            background: repeating-radial-gradient(circle,
+                    transparent 0,
+                    transparent 0.125vh,
+                    rgba(0, 0, 0, 0.1) 0.125vh,
+                    rgba(0, 0, 0, 0.1) 0.25vh);
+            /* 径向条纹 */
+            z-index: 2;
+            opacity: 0.75;
+            /* 透明度控制叠加效果 */
+            mix-blend-mode: multiply;
+        }
+
+        .metal::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 18vh;
+            height: 18vh;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.5), transparent 80%);
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        .small-metal {
+            width: 4vh;
+            /* 小按钮大小 */
+            height: 4vh;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg,
+                    #6e5e00, #a38600, #ffd700, #ffdd33, #fff8dc,
+                    #ffdd33, #ffcc00, #3b3b3b, #8b6900, #ffd700,
+                    #ffdd33, #fff8dc, #ffdd33, #615200, #8a7200,
+                    #ffd700, #ffcc33, #fff8dc, #ffdd33, #ffe4a1,
+                    #635400, #ffd700, #ffdd33, #fff8dc, #ffdd33,
+                    #a09100, #6e5e00);
+            /* 金色渐变 */
+            box-shadow:
+                0 0.5vh 2vh rgba(0, 0, 0, 1),
+                /* 外部阴影 */
+                inset 0 2px 5px rgba(255, 255, 255, 0.5),
+                /* 内部高光 */
+                inset 0 -3px 5px rgba(0, 0, 0, 0.5);
+            /* 内部阴影 */
+            position: absolute;
+            top: 50%;
+            /* 小按钮位置 */
+            left: 50%;
+            /* 小按钮位置 */
+            transform: translate(-50%, -50%);
+            /* 避免伪类溢出 */
+        }
+
+        .Wtext {
+            position: relative;
+            bottom: 18.75vh;
+            left: 9.5vh;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+
+        .Wtext span {
+            position: absolute;
+            font-size: 1.5vh;
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            /* Adjust the rotation origin to bring the base of characters inward */
+            transform-origin: 50% calc(50% + 8vh);
+            z-index: 3;
+        }
+
+        /* Position characters with their bases inside */
+        .char-1 {
+            transform: rotate(0deg) translateY(-50%);
+        }
+
+        .char-2 {
+            transform: rotate(22.5deg) translateY(-50%);
+        }
+
+        .char-3 {
+            transform: rotate(45deg) translateY(-50%);
+        }
+
+        .char-4 {
+            transform: rotate(67.5deg) translateY(-50%);
+        }
+
+        .char-5 {
+            transform: rotate(90deg) translateY(-50%);
+        }
+
+        .char-6 {
+            transform: rotate(112.5deg) translateY(-50%);
+        }
+
+        .char-7 {
+            transform: rotate(135deg) translateY(-50%);
+        }
+
+        .char-8 {
+            transform: rotate(157.5deg) translateY(-50%);
+        }
+
+        .char-9 {
+            transform: rotate(180deg) translateY(-50%);
+        }
+
+        .char-10 {
+            transform: rotate(202.5deg) translateY(-50%);
+        }
+
+        .char-11 {
+            transform: rotate(225deg) translateY(-50%);
+        }
+
+        .char-12 {
+            transform: rotate(247.5deg) translateY(-50%);
+        }
+
+        .char-13 {
+            transform: rotate(270deg) translateY(-50%);
+        }
+
+        .char-14 {
+            transform: rotate(292.5deg) translateY(-50%);
+        }
+
+        .char-15 {
+            transform: rotate(315deg) translateY(-50%);
+        }
+
+        .char-16 {
+            transform: rotate(337.5deg) translateY(-50%);
+        }
+
+        .Wtext span:nth-child(3),
+        .Wtext span:nth-child(7),
+        .Wtext span:nth-child(11),
+        .Wtext span:nth-child(15) {
+            color: red;
+            /* Change color to red */
+        }
+
+        .trapezoid {
+            position: absolute;
+            top: 0vh;
+            right: 4vh;
+            width: 16vh;
+            height: 4vh;
+            background: #927849;
+            clip-path: polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%);
+
+
+        }
+
+        .trapezoid2 {
+            position: absolute;
+            top: 0vh;
+            right: 5vh;
+            width: 14vh;
+            height: 4vh;
+            background: #dbcaa9;
+            clip-path: polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%);
+
+
+        }
+
+        .trapezoid3 {
+            position: absolute;
+            top: 1.5vh;
+            right: 1.5vh;
+            width: 21vh;
+            height: 21vh;
+            border-radius: 50%;
+            background: #927849;
+        }
+
+        .walkman:hover~*,
+        .walkman:hover,
+        .walkman:hover .walkmanB,
+        .walkman:hover .trapezoid2,
+        .walkman:hover .button,
+        .walkman:hover .walkmans,
+        .walkman:hover .button-stop,
+        .walkman:hover .button-color {
+            background: linear-gradient(135deg, #911212, #550000);
+            /* 确保完全替换背景 */
+
+            /* Deep red gradient */
+            color: #FFF;
+            /* Change text color for better visibility */
+            box-shadow: inset 0.5vh 0.5vh 1vh rgba(192, 101, 101, 0.6),
+                3vh 3vh 5vh rgba(85, 0, 0, 0.3),
+                -1vh -1vh 2vh rgba(139, 0, 0, 0.1);
+            /* Deep red shadow */
+            border-color: #550000;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- SVG mask 定义：整个区域白色，再在中间绘制较大的黑色区域作为镂空 -->
+    <svg width="0" height="0">
+        <defs>
+            <mask id="window-hole-mask" maskUnits="objectBoundingBox">
+                <rect x="0" y="0" width="1" height="1" fill="white" />
+                <!-- 此处设为 cassette-window 及 walkmanb 内部镂空区域，左右各留 10% -->
+                <rect x="0.1" y="0.1" width="0.8" height="0.8" fill="black" />
+            </mask>
+        </defs>
+    </svg>
+    <div class="parent">
+        <div class="walkman">
+            <div class="walkmanB"></div>
+            <div class="trapezoid"></div>
+            <div class="trapezoid2"></div>
+            <div class="trapezoid3"></div>
+            <div class="logoA">♔</div>
+            <div class="logo-year">1954</div>
+            <div class="button-hole">
+                <div class="button"></div>
+            </div>
+            <div class="walkmanb-cell"></div>
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const container = document.querySelector(".walkmanb-cell");
+
+                    for (let i = 0; i < 225; i++) {
+                        const cell = document.createElement("div");
+                        cell.className = "cell";
+                        container.appendChild(cell);
+                    }
+                });
+            </script>
+            <div class="walkmans">
+
+                <div class="button-stop">
+                    <div class="button-color"></div>
+                </div>
+
+            </div>
+            <div class="button-hold2"></div>
+        </div>
+        <div class="container">
+            <div class="metal">
+                <div class="small-metal"></div>
+            </div>
+            <div class="Wtext">
+                <span class="char-1">5s</span>
+                <span class="char-2">16</span>
+                <span class="char-3">&#9650;</span>
+                <span class="char-4">10</span>
+                <span class="char-5">8</span>
+                <span class="char-6">7</span>
+                <span class="char-7">&#9650;</span>
+                <span class="char-8">6</span>
+                <span class="char-9">5s</span>
+                <span class="char-10">16</span>
+                <span class="char-11">&#9650;</span>
+                <span class="char-12">10</span>
+                <span class="char-13">8</span>
+                <span class="char-14">7</span>
+                <span class="char-15">&#9650;</span>
+                <span class="char-16">6</span>
+            </div>
+        </div>
+        <script>
+            // 接收父页面的消息
+            window.addEventListener("message", (event) => {
+                if (event.data === "hover") {
+                    document.querySelectorAll(".walkman, .walkmanB, .trapezoid2, .button, .walkmans, .button-stop, .button-color")
+                        .forEach(element => element.classList.add("hovered"));
+                }
+                if (event.data === "unhover") {
+                    document.querySelectorAll(".hovered")
+                        .forEach(element => element.classList.remove("hovered"));
+                }
+            });
+        </script>
+        <script>
+            // 获取目标元素
+            const walkman = document.querySelector(".walkman");
+
+            // 循环触发 hover 效果的函数
+            const toggleHoverEffect = () => {
+                walkman.classList.add("hover-effect"); // 添加 hover 类
+                setTimeout(() => {
+                    walkman.classList.remove("hover-effect"); // 两秒后移除 hover 类
+                }, 2000); // 设置两秒后恢复
+            };
+
+            // 设置循环，每隔两秒触发 hover 效果
+            setInterval(toggleHoverEffect, 4000); // 每隔 4 秒调用 toggleHoverEffect
+        </script>
+    </div>
+</body>
+
+</html>

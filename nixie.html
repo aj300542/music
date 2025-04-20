@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>NixieClock</title>
+    <script src="script/wakelock.js"></script>
+    <link rel="shortcut icon" href="nixie.ico">
+    <link rel="stylesheet" href="style/color.css">
+    <style>
+        #div1 {
+            position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 50%;
+            left: 50%;
+            width: 20vh;
+            height: 10vh;
+            padding: 5vh;
+            z-index: 49;
+
+        }
+
+
+        #content {
+            background: transparent;
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        #content::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.1);
+            /* 半透明的颜色层 */
+            backdrop-filter: blur(3px);
+            /* 模糊滤镜 */
+        }
+
+        .no-blur::after {
+            backdrop-filter: none;
+        }
+    </style>
+
+    <style>
+        #parent {}
+    </style>
+    <style>
+        @font-face {
+            font-family: 'Nixiebold-bold';
+            src: url('fonts/Nixiebold-bold.woff2') format('woff2'),
+                url('fonts/Nixiebold-bold.woff') format('woff'),
+                url('fonts/Nixiebold-bold.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Nixiebold-mini';
+            src: url('fonts/Nixiebold-mini.woff2') format('woff2'),
+                url('fonts/Nixiebold-mini.woff') format('woff'),
+                url('fonts/Nixiebold-mini.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Nixiebold-slim';
+            src: url('fonts/Nixiebold-slim.woff2') format('woff2'),
+                url('fonts/Nixiebold-slim.woff') format('woff'),
+                url('fonts/Nixiebold-slim.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Nixiebold-boldbig';
+            src: url('fonts/Nixiebold-boldbig.ttf') format('woff2'),
+                url('fonts/Nixiebold-boldbig.woff') format('woff'),
+                url('fonts/Nixiebold-boldbig.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50%,
+            100% {
+                opacity: 1;
+            }
+
+            25%,
+            75% {
+                opacity: 0;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: transparent;
+            color: #8b4600;
+            font-family: 'Nixiebold-bold', Arial, sans-serif;
+            line-height: 2vh;
+            letter-spacing: 0.5em;
+            line-height: 1.5em;
+        }
+
+        .nixieclock {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            height: 100vh;
+            background-color: transparent;
+            color: #613000;
+            font-size: 25vh;
+            font-family: 'Nixiebold-mini', Arial, sans-serif;
+            line-height: 2vh;
+            letter-spacing: 0.5em;
+            line-height: 1.5em;
+            z-index: 11;
+        }
+
+        .currenttime {
+            position: absolute;
+            top: -25vh;
+            width: 80vh;
+            /* 添加宽度以便可以居中对齐 */
+            height: 50vh;
+            background-color: transparent;
+            z-index: 0;
+            display: flex;
+            justify-content: center;
+            /* 水平居中对齐 */
+            align-items: center;
+            /* 垂直居中对齐 */
+            letter-spacing: 0.5em;
+            line-height: 1.5em;
+            font-size: 9vh;
+            z-index: 99;
+        }
+
+        .solar {
+            mix-blend-mode: screen;
+
+        }
+
+
+        .nixiebold {
+            font-family: 'Nixiebold-bold';
+        }
+
+        .nixieslim {
+
+            background: linear-gradient(45deg, #ff9900, #ff00cc);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-family: 'Nixiebold-slim';
+        }
+
+        .clockz {
+            animation: blink 0s infinite;
+            /* 应用闪烁动画 */
+            z-index: 1;
+        }
+
+        .digitdota,
+        .digitdotb {
+            position: absolute;
+            top: 50vh;
+            font-size: 26vh;
+            width: 100vw;
+            display: flex;
+            line-height: 2vh;
+            justify-content: space-between;
+            color: rgb(251, 124, 0);
+            font-family: 'Nixiebold-mini', Arial, sans-serif;
+            z-index: 99;
+        }
+
+        .digitdota {
+            left: 33.25vw;
+        }
+
+        .digitdotb {
+            left: 59.25vw;
+        }
+
+        .digita,
+        .digitb,
+        .digitc,
+        .digitd,
+        .digite,
+        .digitf {
+            position: absolute;
+            top: 33vh;
+            color: black;
+            display: flex;
+            width: 100%;
+            text-align: space-between;
+        }
+
+        .digita {
+            left: 16vw;
+        }
+
+        .digitb {
+            left: 28vw;
+        }
+
+        .digitc {
+            left: 41vw;
+        }
+
+        .digitd {
+            left: 54vw;
+        }
+
+        .digite {
+            left: 67vw;
+        }
+
+        .digitf {
+            left: 79vw;
+        }
+
+
+
+        .docka,
+        .dockb,
+        .dockc,
+        .dockd,
+        .docke,
+        .dockf {
+            position: absolute;
+            top: 62vh;
+            border: 0px solid #1f0019;
+            border-radius: 6px;
+            height: 3.3vh;
+            width: 15.5vh;
+            background-image: linear-gradient(to bottom right, rgba(117, 96, 74, 0.2), rgba(56, 16, 16, 0.2));
+            vertical-align: middle;
+            background-image: url('svg/hexagonop.svg');
+            background-size: 25vh 80vh;
+            background-position: 0.25vh 3.1vh;
+            z-index: 19;
+            display: flex;
+            justify-content: space-between;
+            backdrop-filter: blur(4px);
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .docka {
+            left: 15vw;
+        }
+
+        .dockb {
+            left: 27vw;
+        }
+
+        .dockc {
+            left: 40vw;
+        }
+
+        .dockd {
+            left: 53vw;
+        }
+
+        .docke {
+            left: 66vw;
+        }
+
+        .dockf {
+            left: 78vw;
+        }
+
+        .dockda,
+        .dockdb,
+        .dockdc,
+        .dockdd,
+        .dockde,
+        .dockdf {
+            position: absolute;
+            top: 38vh;
+            border: 0px solid #1f0019;
+            border-radius: 6px;
+            height: 29.3vh;
+            width: 11.5vh;
+            background-image: linear-gradient(to bottom right, rgba(117, 96, 74, 0.2), rgba(56, 16, 16, 0.2));
+            vertical-align: middle;
+            background-image: url('svg/dock.svg');
+            background-size: 160vh 40vh;
+            background-position: 0.5vh -0.5vh;
+            display: flex;
+            justify-content: space-between;
+            backdrop-filter: blur(4px);
+            filter:
+                drop-shadow(0 0 2px #fb0000) drop-shadow(0 0 5px #ff9100);
+            mix-blend-mode: screen;
+        }
+
+        .dockda {
+            left: 16.5vw;
+        }
+
+        .dockdb {
+            left: 28.5vw;
+        }
+
+        .dockdc {
+            left: 41.5vw;
+        }
+
+        .dockdd {
+            left: 54.5vw;
+        }
+
+        .dockde {
+            left: 67.5vw;
+        }
+
+        .dockdf {
+            left: 79.5vw;
+        }
+
+        #nixieclock {
+            position: absolute;
+            top: 51.5vh;
+            left: 0vh;
+            vertical-align: middle;
+            font-size: 25vh;
+            display: flex;
+            letter-spacing: 0.5em;
+            justify-content: space-between;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+
+
+    <div id="content">
+        <div class="nixieclock">
+            <div id="parent">
+                <div id="clocka">
+                    <span id="digita5" class="digita" style="z-index: 10;">5</span>
+                    <span id="digita6" class="digita" style="z-index: 9;">6</span>
+                    <span id="digita7" class="digita" style="z-index: 8;">7</span>
+                    <span id="digita4" class="digita" style="z-index: 7;">4</span>
+                    <span id="digita3" class="digita" style="z-index: 6;">3</span>
+                    <span id="digita8" class="digita" style="z-index: 5;">8</span>
+                    <span id="digita9" class="digita" style="z-index: 4;">9</span>
+                    <span id="digita2" class="digita" style="z-index: 3;">2</span>
+                    <span id="digita0" class="digita" style="z-index: 2;">0</span>
+                    <span id="digita1" class="digita" style="z-index: 1;">1</span>
+                </div>
+                <div id="clockb">
+                    <span id="digitb5" class="digitb" style="z-index: 10;">5</span>
+                    <span id="digitb6" class="digitb" style="z-index: 9;">6</span>
+                    <span id="digitb7" class="digitb" style="z-index: 8;">7</span>
+                    <span id="digitb4" class="digitb" style="z-index: 7;">4</span>
+                    <span id="digitb3" class="digitb" style="z-index: 6;">3</span>
+                    <span id="digitb8" class="digitb" style="z-index: 5;">8</span>
+                    <span id="digitb9" class="digitb" style="z-index: 4;">9</span>
+                    <span id="digitb2" class="digitb" style="z-index: 3;">2</span>
+                    <span id="digitb0" class="digitb" style="z-index: 2;">0</span>
+                    <span id="digitb1" class="digitb" style="z-index: 1;">1</span>
+                </div>
+                <div id="clockc">
+                    <span id="digitc5" class="digitc" style="z-index: 10;">5</span>
+                    <span id="digitc6" class="digitc" style="z-index: 9;">6</span>
+                    <span id="digitc7" class="digitc" style="z-index: 8;">7</span>
+                    <span id="digitc4" class="digitc" style="z-index: 7;">4</span>
+                    <span id="digitc3" class="digitc" style="z-index: 6;">3</span>
+                    <span id="digitc8" class="digitc" style="z-index: 5;">8</span>
+                    <span id="digitc9" class="digitc" style="z-index: 4;">9</span>
+                    <span id="digitc2" class="digitc" style="z-index: 3;">2</span>
+                    <span id="digitc0" class="digitc" style="z-index: 2;">0</span>
+                    <span id="digitc1" class="digitc" style="z-index: 1;">1</span>
+                </div>
+                <div id="clockd">
+                    <span id="digitd5" class="digitd" style="z-index: 10;">5</span>
+                    <span id="digitd6" class="digitd" style="z-index: 9;">6</span>
+                    <span id="digitd7" class="digitd" style="z-index: 8;">7</span>
+                    <span id="digitd4" class="digitd" style="z-index: 7;">4</span>
+                    <span id="digitd3" class="digitd" style="z-index: 6;">3</span>
+                    <span id="digitd8" class="digitd" style="z-index: 5;">8</span>
+                    <span id="digitd9" class="digitd" style="z-index: 4;">9</span>
+                    <span id="digitd2" class="digitd" style="z-index: 3;">2</span>
+                    <span id="digitd0" class="digitd" style="z-index: 2;">0</span>
+                    <span id="digitd1" class="digitd" style="z-index: 1;">1</span>
+                </div>
+                <div id="clocke">
+                    <span id="digite5" class="digite" style="z-index: 10;">5</span>
+                    <span id="digite6" class="digite" style="z-index: 9;">6</span>
+                    <span id="digite7" class="digite" style="z-index: 8;">7</span>
+                    <span id="digite4" class="digite" style="z-index: 7;">4</span>
+                    <span id="digite3" class="digite" style="z-index: 6;">3</span>
+                    <span id="digite8" class="digite" style="z-index: 5;">8</span>
+                    <span id="digite9" class="digite" style="z-index: 4;">9</span>
+                    <span id="digite2" class="digite" style="z-index: 3;">2</span>
+                    <span id="digite0" class="digite" style="z-index: 2;">0</span>
+                    <span id="digite1" class="digite" style="z-index: 1;">1</span>
+                </div>
+                <div class="clockf">
+                    <span id="digitf5" class="digitf" style="z-index: 10;">5</span>
+                    <span id="digitf6" class="digitf" style="z-index: 9;">6</span>
+                    <span id="digitf7" class="digitf" style="z-index: 8;">7</span>
+                    <span id="digitf4" class="digitf" style="z-index: 7;">4</span>
+                    <span id="digitf3" class="digitf" style="z-index: 6;">3</span>
+                    <span id="digitf8" class="digitf" style="z-index: 5;">8</span>
+                    <span id="digitf9" class="digitf" style="z-index: 4;">9</span>
+                    <span id="digitf2" class="digitf" style="z-index: 3;">2</span>
+                    <span id="digitf0" class="digitf" style="z-index: 2;">0</span>
+                    <span id="digitf1" class="digitf" style="z-index: 1;">1</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="digitdota">:</div>
+        <div class="digitdotb">:</div>
+
+    </div>
+
+
+
+
+    <script>
+        function updateDigitColor(digitClass, timeUnit) {
+            const digits = document.getElementsByClassName(digitClass);
+            for (let i = 0; i < digits.length; i++) {
+                digits[i].style.color = '#311900';
+                digits[i].classList.remove('nixieslim');
+                digits[i].classList.remove('clockz');
+                digits[i].style.webkitTextStroke = "";  // 移除描边
+                digits[i].style.mixBlendMode = "";  // 移除混合模式
+                digits[i].style.textShadow = "";  // 移除阴影
+            }
+            const element = document.getElementById(`${digitClass}${timeUnit}`);
+            element.style.color = '#fb7c00';
+            element.classList.add('nixieslim');
+            element.classList.add('clockz');
+            element.style.webkitTextStroke = "0.005vh #ffffff";  // 添加描边
+            element.style.mixBlendMode = "screen"; 
+           // 添加混合模式 element.style.opacity = 0.6;  / // 添加混合模式
+            element.style.textShadow = "0 0 5px #fb7c00, 0 0 10px #fb7c00, 0 0 15px #ff0000, 0 0 20px #fb7c00, 0 0 25px #fb7c00, 0 0 30px #fb7c00, 0 0 35px #ffffff";  // 添加阴影
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0').split("");
+            const minutes = now.getMinutes().toString().padStart(2, '0').split("");
+            const seconds = now.getSeconds().toString().padStart(2, '0').split("");
+
+            updateDigitColor('digita', hours[0]);
+            updateDigitColor('digitb', hours[1]);
+            updateDigitColor('digitc', minutes[0]);
+            updateDigitColor('digitd', minutes[1]);
+            updateDigitColor('digite', seconds[0]);
+            updateDigitColor('digitf', seconds[1]);
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+
+
+</body>
+
+</html>

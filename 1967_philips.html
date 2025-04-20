@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>philips el3302</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+            /* 隐藏滚动条 */
+        }
+
+        @font-face {
+            font-family: 'Nixiebold-slim';
+            src: url('fonts/Nixiebold-slim.woff2') format('woff2'),
+                url('fonts/Nixiebold-slim.woff') format('woff'),
+                url('fonts/Nixiebold-slim.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(0, 0, 0);
+            /* 网页背景色，用于镂空效果显示 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+
+        .walkman {
+            width: 40vh;
+            height: 69vh;
+            background: linear-gradient(135deg, #292929, #2e2e2e);
+            border-radius: 1vh;
+            box-shadow:
+                3vh 3vh 5vh rgba(0, 0, 0, 0.0);
+            position: relative;
+        }
+
+        .walkmanb {
+            width: 36.5vh;
+            height: 30vh;
+            background: linear-gradient(135deg, #ffffff, #c7c7c7);
+            border: 0.5vh solid #696969;
+            border-radius: 0.5vh;
+            position: absolute;
+            top: 1vh;
+            left: 50%;
+            transform: translate(-50%);
+            box-shadow: inset 0.25vh 0.25vh 0.5vh rgba(233, 233, 233, 0.8),
+                0.25vh 0.25vh 0.5vh rgb(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .walkmanb-cell {
+            width: 35vh;
+            height: 28vh;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: transparent;
+            position: absolute;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: repeat(28, 1fr);
+            grid-template-rows: repeat(35, 1fr);
+            gap: 0.4vh;
+            /* 让单元格之间有间距 */
+        }
+
+        .cell {
+            width: 100%;
+            height: 100%;
+            background: black;
+            box-sizing: border-box;
+        }
+
+        .walkmanb-fill {
+            width: 100%;
+            height: 100%;
+            background: black;
+            -webkit-mask: url(#window-hole-mask);
+            mask: url(#window-hole-mask);
+            -webkit-mask-type: luminance;
+            mask-type: luminance;
+        }
+
+        .walkmans {
+            width: 38vh;
+            height: 8vh;
+            background: linear-gradient(180deg, #e2e2e2, #afafaf);
+            left: 50%;
+            transform: translate(-50%);
+            position: absolute;
+            bottom: 0vh;
+            box-shadow: inset 5vh 5vh 5vh rgba(230, 230, 230, 0.2),
+                3vh 3vh 5vh rgba(65, 65, 65, 0.5);
+        }
+
+        .walkmanw {
+            width: 40vh;
+            height: 20vh;
+            position: absolute;
+            left: 50%;
+            background: #000000;
+            transform: translate(-50%);
+            bottom: 13vh;
+            opacity: 1;
+        }
+
+        .walkmanw1 {
+            width: 40vh;
+            height: 19vh;
+            position: absolute;
+            left: 50%;
+            background: #2e2e2e;
+            transform: translate(-50%);
+            bottom: 13.5vh;
+            opacity: 1;
+        }
+
+        .walkmanw1-b {
+            width: 2vh;
+            height: 1.5vh;
+            background: #303030;
+            position: absolute;
+            top: -2vh;
+            left: 50%;
+            transform: translate(-50%);
+
+        }
+
+        .walkmanw1-w {
+            width: 1.5vh;
+            height: 1.25vh;
+            top: 0.25vh;
+            left: 50%;
+            transform: translate(-50%);
+            background: #000000;
+            position: relative;
+        }
+
+        .cassette-window {
+            position: absolute;
+            top: 3vh;
+            left: 50%;
+            transform: translate(-50%);
+            width: 10vh;
+            height: 6vh;
+            border: 0.5vh solid #000000;
+            border-radius: 0.5vh;
+            background: linear-gradient(180deg, #7e7e7e, rgb(3, 3, 3));
+            box-shadow: inset 0.5vh 0.5vh 1vh rgb(0, 0, 0);
+            z-index: 9;
+            overflow: hidden;
+        }
+
+        .cassette-window iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            transform: none;
+            z-index: 99;
+            scale: 700%;
+            opacity: 0.2;
+            /* 如有需要，可调整 z-index */
+        }
+
+        .cassette-fill {
+            width: 100%;
+            height: 100%;
+            background: black;
+            -webkit-mask: url(#window-hole-mask);
+            mask: url(#window-hole-mask);
+            -webkit-mask-type: luminance;
+            mask-type: luminance;
+        }
+
+        .logo {
+            position: absolute;
+            background: rgb(233, 233, 233);
+            width: 12vh;
+            height: 4vh;
+            top: 5.5vh;
+            right: 5vh;
+            border-radius: 0.25vh;
+            font-family: monospace;
+            color: rgb(0, 0, 0);
+            font-size: 2.8vh;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            letter-spacing: 0vh;
+            white-space: nowrap;
+        }
+
+        .logo-year {
+            position: absolute;
+            bottom: 9vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgb(209, 209, 209);
+            font-family: 'Nixiebold-slim', Arial, sans-serif;
+            color: rgb(255, 255, 255);
+            font-size: 1.5vh;
+            letter-spacing: 0.5vh;
+            /* 增加字符之间的间距 */
+            opacity: 0.75;
+            z-index: 99;
+        }
+
+        .logo-rec {
+            position: absolute;
+            bottom: -1.25vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgb(53, 53, 53);
+            font-size: 1vh;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+        .logoA {
+            position: absolute;
+            top: 1.5vh;
+            left: 1.5vh;
+            color: rgb(209, 209, 209);
+            font-size: 2vh;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+        .logoB {
+            position: absolute;
+            top: 4.5vh;
+            right: 1vh;
+            color: rgb(190, 59, 59);
+            font-size: 0.55vh;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+        .logoC {
+            position: absolute;
+            top: 19.5vh;
+            left: 10vh;
+            color: rgb(209, 209, 209);
+            font-size: 0.75vh;
+            font-weight: bold;
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .hollow-text {
+            position: absolute;
+            top: 19.5vh;
+            left: 21vh;
+            font-size: 5vh;
+            color: transparent;
+            -webkit-text-stroke: 1px rgb(209, 209, 209);
+            z-index: 3;
+        }
+
+        .logoD {
+            position: absolute;
+            top: 20.25vh;
+            left: 25vh;
+            color: rgb(209, 209, 209);
+            font-size: 1vh;
+            font-weight: bold;
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .logoE {
+            position: absolute;
+            top: 24.5vh;
+            left: 21vh;
+            color: rgb(209, 209, 209);
+            font-size: 1vh;
+            font-weight: bold;
+            letter-spacing: 0.125vh;
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .logoF {
+            position: absolute;
+            top: 22.5vh;
+            left: 12vh;
+            color: rgb(209, 209, 209);
+            font-size: 2vh;
+            font-weight: bold;
+            letter-spacing: 0vh;
+            white-space: nowrap;
+            opacity: 0.3;
+            z-index: 9;
+        }
+
+        .button {
+            width: 4vh;
+            height: 1.75vh;
+            background: rgb(194, 2, 2);
+            box-shadow: inset 0.25vh 0.25vh 0.5vh rgba(53, 53, 53, 0.8),
+                0.25vh 0.25vh 0.5vh rgb(0, 0, 0, 0);
+            border-radius: 0.1vh;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9;
+        }
+
+        .button-hole {
+            width: 5vh;
+            height: 2.75vh;
+            background: linear-gradient(180deg, #ffffff, #7c7c7c);
+            border-radius: 0.1vh;
+            position: absolute;
+            bottom: 2vh;
+            left: 5.5vh;
+            z-index: 03;
+        }
+
+        .button-hold3 {
+            width: 5vh;
+            height: 1vh;
+            background: linear-gradient(135deg, #9b9b9b, rgb(110, 110, 110));
+            border-radius: 0.1vh;
+            position: absolute;
+            top: -1vh;
+            left: 50%;
+            transform: translate(-50%);
+            opacity: 1;
+            z-index: 3;
+        }
+
+        .button-play {
+            width: 8.75vh;
+            height: 3vh;
+            border-radius: 0.1vh;
+            position: absolute;
+            bottom: 1.5vh;
+            left: 50%;
+            transform: translate(-50%);
+            text-align: center;
+            font-size: 1.5vh;
+            line-height: 3vh;
+            /* 垂直居中 */
+            letter-spacing: 0.5vh;
+            color: rgb(179, 179, 179);
+            white-space: nowrap;
+        }
+
+        .button-privew {
+            width: 8.75vh;
+            height: 3vh;
+            position: absolute;
+            bottom: 0.5vh;
+            left: -3vh;
+            font-size: 1.25vh;
+            text-align: center;
+            /* 水平居中 */
+            line-height: 3vh;
+            /* 垂直居中 */
+            letter-spacing: -0.25vh;
+            color: rgb(179, 179, 179);
+            white-space: nowrap;
+        }
+
+        .button-next {
+            width: 8.75vh;
+            height: 3vh;
+            position: absolute;
+            bottom: 0.5vh;
+            left: 2.25vh;
+            font-size: 1.25vh;
+            text-align: center;
+            /* 水平居中 */
+            line-height: 3vh;
+            /* 垂直居中 */
+            letter-spacing: -0.25vh;
+            color: rgb(179, 179, 179);
+            white-space: nowrap;
+        }
+
+        .button-stop {
+            width: 5vh;
+            height: 2.5vh;
+            background: linear-gradient(90deg, #9b9b9b, rgb(112, 112, 112), #979797, rgb(0, 0, 0));
+            border: 0.25vh solid #000000;
+            border-radius: 0.1vh;
+            position: absolute;
+            top: 1.5vh;
+            left: 50%;
+            transform: translate(-50%);
+            text-align: center;
+            /* 水平居中 */
+            line-height: 1.5vh;
+            /* 垂直居中 */
+            letter-spacing: 0.5vh;
+            color: rgb(0, 0, 0);
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .button-color {
+            width: 4.25vh;
+            height: 1.5vh;
+            background: linear-gradient(to right,
+                    #000000 0%,
+                    #000000 33.33%,
+                    #ff0000 33.33%,
+                    #ff0000 66.66%,
+                    #48ff00 66.66%,
+                    #48ff00 100%);
+            mix-blend-mode: multiply;
+            border: 0.25vh solid #6b6b6b;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            /* 水平居中 */
+            line-height: 1.5vh;
+            /* 垂直居中 */
+            letter-spacing: 0.5vh;
+            color: rgb(112, 112, 112);
+            white-space: nowrap;
+            opacity: 0.5;
+            z-index: 3;
+        }
+
+        .button-stop-penal {
+            width: 5.5vh;
+            height: 8vh;
+            background: linear-gradient(90deg, #a0a0a0, #7e7e7e, #b9b9b9, #838383);
+            border-radius: 0.1vh;
+            position: absolute;
+            top: 0vh;
+            left: 29.5vh;
+            opacity: 1;
+            text-align: center;
+            /* 水平居中 */
+            line-height: 1.5vh;
+            /* 垂直居中 */
+            letter-spacing: 0.5vh;
+            color: rgb(112, 112, 112);
+            white-space: nowrap;
+        }
+
+        .button-hold {
+            width: 9.5vh;
+            height: 1vh;
+            background: linear-gradient(135deg, #dadada, rgb(110, 110, 110));
+            border: 0.1vh solid #4b4b4b;
+            border-radius: 0.1vh;
+            position: absolute;
+            bottom: -1.5vh;
+            left: 50%;
+            transform: translate(-50%);
+        }
+
+        .button-hold2 {
+            width: 9.5vh;
+            height: 0.5vh;
+            background: linear-gradient(135deg, #dadada, rgb(110, 110, 110));
+            border: 0.1vh solid #4b4b4b;
+            border-radius: 0.1vh;
+            position: absolute;
+            top: -1.25vh;
+            left: 50%;
+            transform: translate(-50%);
+        }
+
+        .CA-button-B {
+            width: 8.5vh;
+            height: 4vh;
+            background: linear-gradient(180deg, #313131, #1b1b1b, #000000);
+            border: 0.15vh solid #303030;
+            border-radius: 0%;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0.5vh 0.5vh 1.55vh rgba(207, 207, 207, 0.2),
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.6);
+        }
+
+        .CA-button-B-hole {
+            width: 9.5vh;
+            height: 5vh;
+            left: 50%;
+            border: 0.1vh solid #252525;
+            transform: translate(-50%);
+            background: linear-gradient(180deg, #ffffff, #7c7c7c);
+            position: absolute;
+            border-radius: 0%;
+        }
+
+        .CC {
+            position: absolute;
+            bottom: 5.25vh;
+            left: 50%;
+            transform: translate(-50%);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- SVG mask 定义：整个区域白色，再在中间绘制较大的黑色区域作为镂空 -->
+    <svg width="0" height="0">
+        <defs>
+            <mask id="window-hole-mask" maskUnits="objectBoundingBox">
+                <rect x="0" y="0" width="1" height="1" fill="white" />
+                <!-- 此处设为 cassette-window 及 walkmanb 内部镂空区域，左右各留 10% -->
+                <rect x="0.1" y="0.1" width="0.8" height="0.8" fill="black" />
+            </mask>
+        </defs>
+    </svg>
+    <div class="walkman">
+        <div class="logoA">-D-50-</div>
+        <div class="logo-year">1967</div>
+        <div class="logoB">IT IS MUSIC</div>
+        <div class="logoC">COMPACT PLAYER</div>
+        <div class="hollow-text">disc</div>
+        <div class="logoD">OMPACT</div>
+        <div class="logoE">DIGITAL AUDIO</div>
+        <div class="logoF">DIGITAL</div>
+        <div class="button-hole">
+            <div class="button"></div>
+            <div class="button-hold3"></div>
+            <div class="logo-rec">REC_LOCK</div>
+        </div>
+        <div class="walkmanb">
+            <div class="walkmanb-cell"></div>
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const container = document.querySelector(".walkmanb-cell");
+
+                    for (let i = 0; i < 980; i++) {
+                        const cell = document.createElement("div");
+                        cell.className = "cell";
+                        container.appendChild(cell);
+                    }
+                });
+            </script>
+            <div class="logo">□EL3302</div>
+        </div>
+        <div class="walkmanb-fill"></div>
+        <div class="walkmans">
+            <div class="button-stop-penal">
+                <div class="button-stop">
+                    <div class="button-color"></div>
+                </div>
+            </div>
+        </div>
+        <div class="CC">
+            <div class="CA-button-B-hole">
+                <div class="CA-button-B">
+                    <div class="button-play">&#9650</div>
+                    <div class="button-privew">&#9664&#9664</div>
+                    <div class="button-next">&#9654&#9654</div>
+                    <div class="button-hold"></div>
+                    <div class="button-hold2"></div>
+                    <div class="walkmanw1-b">
+                        <div class="walkmanw1-w"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="walkmanw"></div>
+        <div class="walkmanw1">
+            <div class="cassette-window">
+                <iframe src="cassette.html"></iframe>
+                <div class="cassette-fill"></div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+</body>
+
+</html>

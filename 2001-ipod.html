@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ipod classic</title>
+  <link rel="stylesheet" href="cssjs/ipod-nemu.css">
+  <style>
+    ::-webkit-scrollbar {
+      display: none;
+      /* 隐藏滚动条 */
+    }
+
+    @font-face {
+      font-family: 'Nixiebold-slim';
+      src: url('fonts/Nixiebold-slim.woff2') format('woff2'),
+        url('fonts/Nixiebold-slim.woff') format('woff'),
+        url('fonts/Nixiebold-slim.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: rgb(0, 0, 0);
+      /* 网页背景色，用于镂空效果显示 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      /* 防止内容溢出 */
+    }
+
+    .walkman {
+      width: 27vh;
+      height: 45vh;
+      background: linear-gradient(135deg, #c5c5c5, #747474);
+      border-radius: 3vh;
+      border: 0.025vh solid rgba(0, 0, 0, 0.5);
+      box-shadow: inset 1vh 1vh 2vh rgba(0, 0, 0, 0.6),
+        3vh 3vh 5vh rgba(0, 0, 0, 0.3),
+        -1vh -1vh 2vh rgba(255, 255, 255, 0.05);
+      filter: drop-shadow(1vh 1vh 3vh rgba(0, 0, 0, 0.5));
+      position: relative;
+    }
+
+    .walkmanb {
+      width: 17vh;
+      height: 17vh;
+      background: radial-gradient(circle, #b8b8b8, #e6e6e6, hsl(0, 0%, 81%));
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 5vh;
+      box-shadow: inset 0.25vh 0.25vh 1vh rgba(230, 230, 230, 0.6),
+        0.25vh 0.25vh 1vh rgba(0, 0, 0, 0);
+      position: absolute;
+      overflow: hidden;
+    }
+
+    .walkmanb-fill {
+      width: 100%;
+      height: 100%;
+      background: black;
+      -webkit-mask: url(#window-hole-mask);
+      mask: url(#window-hole-mask);
+      -webkit-mask-type: luminance;
+      mask-type: luminance;
+    }
+
+    .walkmanw {
+      width: 6vh;
+      height: 6vh;
+      background: linear-gradient(135deg, #797979, #d1d1d1);
+      border-radius: 0.5vh;
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
+      bottom: 5vh;
+    }
+
+    .logo {
+      position: absolute;
+      top: 0.5vh;
+      left: 50%;
+      transform: translate(-50%);
+      color: rgb(165, 165, 165);
+      font-size: 1.5vh;
+      font-weight: bold;
+    }
+
+    .logo-year {
+      position: absolute;
+      bottom: 1.5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgb(209, 209, 209);
+      font-family: 'Nixiebold-slim', Arial, sans-serif;
+      color: rgb(255, 255, 255);
+      font-size: 1.5vh;
+      letter-spacing: 0.5vh;
+      /* 增加字符之间的间距 */
+      opacity: 0.75;
+      z-index: 99;
+    }
+
+    .logoA {
+      position: absolute;
+      top: 50%;
+      left: 1vh;
+      transform: translateY(-50%) scaleY(0.6);
+      /* 合并 transform */
+      transform-origin: center;
+      /* 以中心点缩放 */
+      color: rgb(165, 165, 165);
+      font-size: 2vh;
+      font-weight: bold;
+    }
+
+    .logoB {
+      position: absolute;
+      top: 50%;
+      right: 1vh;
+      transform: translateY(-50%) scaleY(0.6);
+      /* 合并 transform */
+      transform-origin: center;
+      /* 以中心点缩放 */
+      color: rgb(165, 165, 165);
+      font-size: 2vh;
+      font-weight: bold;
+    }
+
+    .logoC {
+      position: absolute;
+      bottom: 0.5vh;
+      left: 50%;
+      transform: translate(-50%);
+      color: rgb(165, 165, 165);
+      font-size: 1.25vh;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      letter-spacing: 0vh;
+      white-space: nowrap;
+    }
+
+    .cassette-window {
+      position: absolute;
+      top: 2vh;
+      left: 50%;
+      transform: translate(-50%);
+      width: 23vh;
+      height: 18vh;
+      border: 0.5vh solid #000000;
+      border-radius: 0.5vh;
+      background: linear-gradient(45deg, #77287a, #2f3481, #22756e);
+      z-index: 2;
+      clip-path: inset(0vh 0vh 0vh 0vh);
+      overflow: hidden;
+    }
+
+    .menu-w {
+      width: 11vh;
+      height: 18vh;
+      background: white;
+      border-radius: 0.1vh;
+      position: absolute;
+      top: 0vh;
+      left: 0vh;
+      opacity: 0.85;
+      z-index: 8;
+    }
+
+    .cassette-window iframe {
+      position: absolute;
+      border: none;
+      top: 1vh;
+      left: 2vh;
+      transform: none;
+      z-index: 99;
+      overflow: hidden;
+      outline: none;
+      scale: 150%;
+      opacity: 0.75;
+    }
+
+    .cassette-fill {
+      width: 100%;
+      height: 100%;
+      background: black;
+      -webkit-mask: url(#window-hole-mask);
+      mask: url(#window-hole-mask);
+      -webkit-mask-type: luminance;
+      mask-type: luminance;
+    }
+
+    .button {
+      width: 1vh;
+      height: 1vh;
+      /* 确保有足够大小来形成三角形 */
+      background: rgb(0, 153, 255);
+      border: 0.1vh solid #a5a5a5;
+      position: absolute;
+      top: 0.05vh;
+      left: 6vh;
+      clip-path: polygon(0% 100%, 100% 50%, 0% 0%);
+      z-index: 9;
+    }
+
+    .buttonB {
+      width: 11vh;
+      height: 1.25vh;
+      background: linear-gradient(180deg, #dddddd, #cfcfcf, #8b8b8b);
+      border-radius: 0.1vh;
+      position: absolute;
+      top: 0vh;
+      left: 0vh;
+      opacity: 0.75;
+      z-index: 8;
+    }
+
+    .buttonC {
+      width: 2vh;
+      height: 0.75vh;
+      background: linear-gradient(180deg, #e0e0e0, #3bcc0e, #087a04);
+      border: 0.3vh solid #a5a5a5;
+      border-radius: 0.1vh;
+      position: absolute;
+      top: 0vh;
+      left: 8vh;
+      z-index: 8;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SVG mask 定义：整个区域白色，再在中间绘制较大的黑色区域作为镂空 -->
+  <svg width="0" height="0">
+    <defs>
+      <mask id="window-hole-mask" maskUnits="objectBoundingBox">
+        <rect x="0" y="0" width="1" height="1" fill="white" />
+        <!-- 此处设为 cassette-window 及 walkmanb 内部镂空区域，左右各留 10% -->
+        <rect x="0.1" y="0.1" width="0.8" height="0.8" fill="black" />
+      </mask>
+    </defs>
+  </svg>
+
+  <div class="walkman">
+    <div class="logo-year">2001</div>
+    <div class="walkmanb">
+      <div class="walkmanw"></div>
+      <div class="logo">MENU</div>
+      <div class="logoA">&#9198</div>
+      <div class="logoB">&#9197</div>
+      <div class="logoC">&#9654 &#9208</div>
+      <div class="walkmanb-fill"></div>
+    </div>
+
+    <div class="cassette-window">
+      <div class="menu-w"></div>
+      <div class="menu-text">
+        <div class="menu-item">Music</div>
+        <div class="menu-item">Videos</div>
+        <div class="menu-item">Photos</div>
+        <div class="menu-item">Podcasts</div>
+        <div class="menu-item">Extras</div>
+        <div class="menu-item">Settings</div>
+        <div class="menu-item">Shuffle Songs</div>
+        <div class="menu-item">Now Playing</div>
+      </div>
+      <div class="control-buttons">
+        <div class="circle"></div>
+      </div>
+      <script src="cssjs/ipod-nemu.js"></script>
+      <div class="button"></div>
+      <div class="buttonB"></div>
+      <div class="buttonC"></div>
+      <iframe src="cassette_metal.html"></iframe>
+      <div class="cassette-fill"></div>
+    </div>
+  </div>
+  <script src="cssjs/ipod-nemu.js"></script>
+</body>
+
+</html>

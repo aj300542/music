@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cassette</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+            /* 隐藏滚动条 */
+        }
+
+        @font-face {
+            font-family: 'Nixiebold-slim';
+            src: url('fonts/Nixiebold-slim.woff2') format('woff2'),
+                url('fonts/Nixiebold-slim.woff') format('woff'),
+                url('fonts/Nixiebold-slim.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .cassette {
+            position: relative;
+            width: 48vh;
+            height: 76vh;
+            background: #919191;
+            border-radius: 4vh;
+            background: linear-gradient(135deg, rgb(228, 228, 228), rgb(202, 202, 202), rgb(148, 148, 148));
+            padding: 1vh;
+            z-index: -2;
+            box-shadow: inset 1vh 1vh 2vh rgba(182, 182, 182, 0.3);
+        }
+
+        .bottom-label {
+            position: absolute;
+            top: 3vh;
+            left: 5vh;
+            width: 3.5vh;
+            height: 3.5vh;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 1vh solid #ffffff;
+            box-shadow: inset 1vh 1vh 2vh rgba(0, 0, 0, 0.3),
+                1vh 1vh 3vh rgba(0, 0, 0, 1);
+        }
+
+        .bottom-screw {
+            position: absolute;
+            top: 13vh;
+            left: 3vh;
+            width: 1.75vh;
+            height: 1.75vh;
+            border-radius: 50%;
+            background: #d1d1d1;
+            border: 0.5vh solid #dadada;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5vh;
+            letter-spacing: 0.2vh;
+            box-shadow: inset 1vh 1vh 2vh rgba(0, 0, 0, 0.3),
+                1vh 1vh 3vh rgba(0, 0, 0, 1);
+            z-index: 9;
+        }
+
+        .bottom-circle {
+            position: absolute;
+            width: 1.75vh;
+            height: 0.25vh;
+            background: #686868;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5vh;
+            letter-spacing: 0.2vh;
+        }
+
+        .bottom-white {
+            position: absolute;
+            top: 13vh;
+            left: 3vh;
+            width: 4.5vh;
+            height: 3.5vh;
+            border-radius: 2vh;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5vh;
+            letter-spacing: 0.2vh;
+            box-shadow:
+                1vh 1vh 3vh rgba(0, 0, 0, 1);
+        }
+
+        .bottom-green {
+            position: relative;
+            width: 2.15vh;
+            height: 1vh;
+            background: linear-gradient(90deg, rgb(0, 78, 0), rgb(14, 80, 8), rgb(71, 134, 58), rgb(14, 80, 8), rgb(0, 78, 0));
+        }
+
+        .plugin-sliver {
+            position: absolute;
+            top: -1vh;
+            right: 4vh;
+            width: 3.5vh;
+            height: 1vh;
+            background: linear-gradient(90deg, rgb(70, 70, 70), rgb(160, 160, 160), rgb(219, 219, 219), rgb(160, 160, 160), rgb(70, 70, 70));
+        }
+
+        .green-but {
+            width: 20vh;
+            height: 1.5vh;
+            /* 高度根据内容动态调整 */
+            display: flex;
+            flex-direction: row;
+            position: absolute;
+            top: -1vh;
+            left: 12vh;
+            color: rgb(0, 0, 0);
+            font-size: 1.6vh;
+            font-weight: 00;
+            white-space: pre-line;
+            opacity: 0.75;
+        }
+
+        .bottom-3rec {
+            width: 3vh;
+            height: 4vh;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: -4vh;
+            left: 3vh;
+            background: transparent;
+            align-items: flex-start;
+            /* 保证宽度居中 */
+            justify-content: space-between;
+            /* 保持间距 */
+        }
+
+        .bottom-rec1,
+        .bottom-rec2,
+        .bottom-rec3 {
+            background: #ececec;
+            margin: 0;
+        }
+
+        /* 保留固定的宽度和高度 */
+        .bottom-rec1 {
+            width: 3vh;
+            height: 1vh;
+        }
+
+        .bottom-rec2 {
+            width: 2.5vh;
+            height: 1vh;
+        }
+
+        .bottom-rec3 {
+            width: 3vh;
+            height: 2vh;
+        }
+
+        .bottom-whiteup {
+            position: absolute;
+            top: 5vh;
+            left: 3vh;
+            width: 4vh;
+            height: 2vh;
+            border-radius: 0.25vh;
+            background: linear-gradient(135deg, rgb(119, 119, 119), rgb(146, 146, 146), rgb(68, 68, 68));
+            box-shadow:
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, .5);
+        }
+
+        .bottom-whitelong {
+            position: absolute;
+            top: 13vh;
+            left: 3vh;
+            width: 11.5vh;
+            height: 2.75vh;
+            border-radius: 2vh;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5vh;
+            letter-spacing: 0.2vh;
+            box-shadow:
+                1vh 1vh 3vh rgba(0, 0, 0, 1);
+        }
+
+        .reelred,
+        .reelblue {
+            position: absolute;
+            right: 1vh;
+            width: 30vh;
+            height: 30vh;
+            background: transparent;
+            border-radius: 50%;
+            overflow: hidden;
+            opacity: 1;
+            z-index: 5;
+            box-shadow: inset 1vh 1vh 2vh rgba(231, 231, 231, 0.3),
+                1vh 1vh 3vh rgba(0, 0, 0, 0.6);
+
+        }
+
+        .reelred {
+            border: 3vh solid #7a0000;
+        }
+
+        .reelblue {
+            border: 3vh solid #004d7a;
+        }
+
+        .reelref {
+            position: absolute;
+            right: 1vh;
+            width: 36vh;
+            height: 36vh;
+            background: conic-gradient(from 0deg,
+                    #333333, #333333, #444444, #666666, #cccccc,
+                    #666666, #bbbbbb, #222222, #444444, #444444,
+                    #666666, #cccccc, #666666, #333333, #555555,
+                    #444444, #bbbbbb, #cccccc, #666666, #dddddd,
+                    #444444, #444444, #666666, #cccccc, #666666,
+                    #aaaaaa, #333333);
+            border-radius: 50%;
+            overflow: hidden;
+            opacity: 0.4;
+            mix-blend-mode: multiply;
+            z-index: 9;
+            animation: spin 30s linear infinite;
+            z-index: 9;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .reelref.left {
+            top: 1vh;
+        }
+
+        .reelref.right {
+            bottom: 1vh;
+        }
+
+        .reelred.left {
+            top: 1vh;
+        }
+
+        .reelblue.right {
+            bottom: 1vh;
+        }
+
+        .reel-center {
+            position: absolute;
+            width: 8vh;
+            height: 8vh;
+            background: #ffffff;
+            border: 0.5vh solid #252525;
+            border-radius: 50%;
+            z-index: 9;
+            animation: spin 6s linear infinite;
+            transform-origin: center;
+        }
+
+        .reel-center-rec {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2vh;
+            height: 8vh;
+            background: #ebebeb;
+            border: 0.05vh solid #474747;
+            border-radius: 0.25vh;
+        }
+
+        .reel-center.left {
+            top: 14.75vh;
+            right: 14.75vh;
+        }
+
+        .reel-center.right {
+            bottom: 14.75vh;
+            right: 14.75vh;
+        }
+
+        .center-hole {
+            position: absolute;
+            width: 12vh;
+            height: 12vh;
+            background: #7a0000;
+            border-radius: 50%;
+            top: 50%;
+            right: 9vh;
+            transform: translate(0, -50%);
+            z-index: 2;
+        }
+
+        .center-hole2 {
+            position: absolute;
+            width: 10vh;
+            height: 10vh;
+            background: transparent;
+            border: 3vh solid #004d7a;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        /* 装饰性旋转矩形 */
+        .rectangles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6vh;
+            height: 10vh;
+            animation: rotate 5s linear infinite;
+        }
+
+        .rectangle-group {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .rectangle {
+            position: absolute;
+            width: 10vh;
+            height: 10vh;
+            border-radius: 50%;
+            background: transparent;
+            border: 4vh solid #7a0000;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -150%);
+            transform-origin: bottom center;
+        }
+
+        .rectangle:nth-child(1) {
+            transform: translate(-50%, -100%) rotate(0deg);
+        }
+
+        .rectangle:nth-child(2) {
+            transform: translate(-50%, -100%) rotate(120deg);
+        }
+
+        .rectangle:nth-child(3) {
+            transform: translate(-50%, -100%) rotate(240deg);
+        }
+
+        .rectangle-group2 {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .rectangle2 {
+            position: absolute;
+            width: 4vh;
+            height: 17vh;
+            background: #004d7a;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            transform-origin: bottom center;
+        }
+
+        .rectangle2:nth-child(1) {
+            transform: translate(-30%, -100%) rotate(0deg);
+        }
+
+        .rectangle2:nth-child(2) {
+            transform: translate(-50%, -100%) rotate(80deg);
+        }
+
+        .rectangle2:nth-child(3) {
+            transform: translate(-50%, -100%) rotate(120deg);
+        }
+
+        .rectangle2:nth-child(4) {
+            transform: translate(-50%, -100%) rotate(200deg);
+        }
+
+        .rectangle2:nth-child(5) {
+            transform: translate(-50%, -100%) rotate(240deg);
+        }
+
+        .rectangle2:nth-child(6) {
+            transform: translate(-50%, -100%) rotate(320deg);
+        }
+
+        @keyframes rotate {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .tape-window {
+            position: relative;
+            left: 12vh;
+            width: 36vh;
+            height: 76vh;
+            border-radius: 4vh;
+            border: 0.000vh solid rgba(109, 109, 109, 0.5);
+            background: transparent;
+            box-sizing: border-box;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .tape-roll-left,
+        .tape-roll-right {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, #cc8007 5%, #633000 50%);
+            opacity: 1;
+            box-shadow: 1vh 1vh 3vh rgba(0, 0, 0, 1);
+            transform-origin: center;
+        }
+
+        .tape-roll-left {
+            top: 18vh;
+            /* 初始宽高为26vh/2 */
+            left: 17.75vh;
+            width: 12vh;
+            /* 初始宽度小 */
+            height: 12vh;
+            animation: resizeLeft 120s linear infinite alternate;
+            transform: translate(-50%, -50%);
+        }
+
+        .tape-roll-right {
+            bottom: 18vh;
+            /* 初始宽高为12vh/2 */
+            left: 17.75vh;
+            width: 26vh;
+            /* 初始宽度大 */
+            height: 26vh;
+            animation: resizeRight 120s linear infinite alternate;
+            transform: translate(-50%, 50%);
+        }
+
+        /* 左侧磁带轮动画 */
+        @keyframes resizeLeft {
+            from {
+                width: 12vh;
+                /* 从小变大 */
+                height: 12vh;
+            }
+
+            to {
+                width: 26vh;
+                height: 26vh;
+            }
+        }
+
+        /* 右侧磁带轮动画 */
+        @keyframes resizeRight {
+            from {
+                width: 26vh;
+                /* 从大变小 */
+                height: 26vh;
+            }
+
+            to {
+                width: 12vh;
+                height: 12vh;
+            }
+        }
+
+        /* 复合图形（两个圆+长方形） */
+        .composite-shape {
+            position: absolute;
+            top: 50%;
+            right: 3vh;
+            transform: translate(0, -50%);
+            background: transparent;
+            width: 15vh;
+            height: 4vh;
+            z-index: -1;
+            transform-origin: center;
+            box-shadow:
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.25);
+        }
+
+        .composite-shape .comp-circle.right {
+            position: absolute;
+            width: 2vh;
+            height: 2vh;
+            background: rgb(161, 161, 161);
+            border-radius: 50%;
+            border: 0.5vh solid rgba(231, 231, 231, 0.5);
+            box-shadow:
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.25);
+            top: 0.5vh;
+            left: 1.5vh;
+        }
+
+        .composite-shape .comp-circle.right-needle {
+            position: absolute;
+            width: 9vh;
+            height: 0.75vh;
+            background: linear-gradient(135deg, rgb(255, 255, 255), rgb(184, 184, 184), rgb(116, 116, 116));
+            border-radius: 0.25vh;
+            box-shadow:
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.25);
+            top: 1.75vh;
+            right: 0vh;
+        }
+
+        .composite-shape .comp-circle.left {
+            position: absolute;
+            width: 20vh;
+            height: 3vh;
+            background: rgb(161, 161, 161);
+            border-radius: 1.5vh;
+            top: 0.5vh;
+            right: -10vh;
+            clip-path: inset(0 50% 0 0);
+            box-shadow: inset 0.5vh 0.5vh 1vh rgba(163, 163, 163, 0.3);
+        }
+
+        .composite-shape .comp-rect {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            border-radius: 0.5vh;
+            transform: translateX(-50%);
+            width: 15vh;
+            height: 4vh;
+            background: linear-gradient(135deg, rgb(221, 221, 221), rgb(255, 255, 255), rgb(243, 243, 243));
+        }
+
+        .rec-shape {
+            position: absolute;
+            top: 50%;
+            left: 3vh;
+            transform: translate(0, -50%);
+            background: transparent;
+            width: 9vh;
+            height: 9vh;
+            z-index: -1;
+            transform-origin: center;
+        }
+
+        .rec-shape .rec-circle.right-needle {
+            position: absolute;
+            width: 8vh;
+            height: 6vh;
+            background: linear-gradient(135deg, rgb(255, 255, 255), rgb(184, 184, 184), rgb(116, 116, 116));
+            border-radius: 0.25vh;
+            border: 0.05vh solid rgb(49, 49, 49, 0.6);
+            box-shadow:
+                0.125vh 0.125vh 0.25vh rgba(0, 0, 0, 1);
+            top: 1.5vh;
+            right: 3vh;
+        }
+
+
+        .rec-shape .rec-rect {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            border-radius: 0.5vh;
+            border: 0.05vh solid rgb(36, 36, 36, 0.6);
+            transform: translateX(-50%);
+            width: 6vh;
+            height: 9vh;
+            background: linear-gradient(135deg, rgb(255, 255, 255), rgb(184, 184, 184), rgb(243, 243, 243));
+            box-shadow:
+                0.5vh 0.5vh 1.5vh rgba(0, 0, 0, 1);
+        }
+
+
+        .hole-circle.rec-top {
+            top: 0.35vh;
+            left: 2.5vh;
+        }
+
+        .hole-circle.rec-bottom {
+            bottom: 0.05vh;
+            left: 2.5vh;
+        }
+
+        .hole-circle.rec-center {
+            top: 2.5vh;
+            right: 1.55vh;
+        }
+
+        .bla-shape {
+            position: absolute;
+            top: 50%;
+            left: 3vh;
+            transform: translate(0, -50%);
+            background: transparent;
+            width: 9vh;
+            height: 9vh;
+            z-index: -1;
+            transform-origin: center;
+        }
+
+        .bla-shape .bla-circle.right-needle {
+            position: absolute;
+            width: 4.5vh;
+            height: 7vh;
+            background: linear-gradient(135deg, rgb(15, 15, 15), rgb(41, 41, 41), rgb(27, 27, 27));
+            border-radius: 0.25vh;
+            border: 0.05vh solid rgb(49, 49, 49, 0.6);
+            box-shadow:
+                0.125vh 0.125vh 0.25vh rgba(0, 0, 0, 1);
+            top: 0.5vh;
+            right: 5vh;
+        }
+
+        .hole-circle.bla-top {
+            right: 3.5vh;
+            top: 1vh;
+        }
+
+        .hole-circle.bla-bottom {
+            bottom: 1.5vh;
+            right: 3.5vh;
+        }
+
+
+        .bla-shape .bla-rect {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            border-radius: 0.5vh;
+            border: 0.05vh solid rgb(36, 36, 36, 0.6);
+            transform: translateX(-50%);
+            width: 6vh;
+            height: 8vh;
+            background: linear-gradient(135deg, rgb(255, 255, 255), rgb(184, 184, 184), rgb(243, 243, 243));
+            box-shadow:
+                0.5vh 0.5vh 1.5vh rgba(0, 0, 0, 1);
+        }
+
+        /* 在 composite-shape 下层增加一个粉灰色长方形 */
+        .under-redcircle {
+            position: absolute;
+            bottom: 17.5vh;
+            left: 5vh;
+            width: 7vh;
+            height: 7vh;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                    #000000 0%,
+                    #000000 7.33%,
+                    #ffffff 13.33%,
+                    #F5F5DC 23.33%,
+                    #ffffff 38.33%,
+                    #500505 39.66%,
+                    #500505 42.66%,
+                    #ffffff 45.66%,
+                    #ffffff 52.66%,
+                    #500505 55.66%,
+                    #500505 100%);
+            z-index: -2;
+            rotate: -15deg;
+            box-shadow:
+                1vh 1vh 3vh rgba(0, 0, 0, 1);
+        }
+
+        .under-black {
+            position: absolute;
+            right: 2.75vh;
+            top: 50%;
+            transform: translateY(-50%);
+            /* 添加水平镜像效果 */
+            width: 15vh;
+            height: 15vh;
+            border-radius: 25%;
+            background: linear-gradient(135deg, rgb(133, 133, 133), rgb(150, 150, 150), rgb(82, 82, 82));
+            clip-path: polygon(100% 0, 0 50%, 100% 100%);
+            /* 底边在右侧的三角形裁剪路径保持不变 */
+            z-index: -2;
+        }
+
+        .under-half {
+            position: absolute;
+            left: 2.5vh;
+            bottom: 11.15vh;
+            width: 10vh;
+            height: 10vh;
+            background: transparent;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .under-half2 {
+            position: absolute;
+            left: -3vh;
+            bottom: 17vh;
+            border-radius: 2vh;
+            width: 10vh;
+            height: 10vh;
+            background: transparent;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .uu-half {
+            position: absolute;
+            right: 8vh;
+            top: 11vh;
+            border-radius: 3vh;
+            width: 22vh;
+            height: 16vh;
+            background: rgb(255, 255, 255);
+            z-index: -3;
+            transform-origin: center;
+        }
+
+        .uu-halff {
+            position: absolute;
+            right: 8vh;
+            top: 15vh;
+            border-radius: 8vh;
+            width: 16vh;
+            height: 32vh;
+            background: rgb(255, 255, 255);
+            z-index: -3;
+            transform-origin: center;
+        }
+
+        .uu-half2 {
+            position: absolute;
+            left: 1.5vh;
+            bottom: 21vh;
+            rotate: -29.8deg;
+            border-radius: 50%;
+            width: 14vh;
+            height: 12vh;
+            background: rgb(87, 87, 87);
+            z-index: -3;
+            clip-path: ellipse(50% 100% at 0% 50%);
+            transform-origin: center;
+            box-shadow: inset 1vh 1vh 2vh rgba(0, 0, 0, 0.6),
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.6);
+        }
+
+        .uu-rec {
+            position: absolute;
+            left: 3vh;
+            bottom: 19vh;
+            rotate: -29.8deg;
+            border-radius: 0.5vh;
+            width: 2.5vh;
+            height: 10vh;
+            background: rgb(241, 241, 241);
+            z-index: -3;
+            transform-origin: center;
+            box-shadow:
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.6);
+        }
+
+        /* 增加四个银色圆形，分别位于 .cassette 的四角 */
+        .corner-circle {
+            position: absolute;
+            width: 1vh;
+            height: 1vh;
+            background: rgb(87, 84, 84);
+            border-radius: 50%;
+            z-index: 3;
+        }
+
+        .corner-circle.top-left {
+            top: 35.5vh;
+            left: 21.5vh;
+        }
+
+        .corner-circle.top-right {
+            top: 35.5vh;
+            right: 6vh;
+        }
+
+        .corner-circle.bottom-left {
+            bottom: 34.5vh;
+            left: 20.5vh;
+        }
+
+        .corner-circle.bottom-right {
+            bottom: 35.5vh;
+            right: 6vh;
+        }
+
+        .hole-meter {
+            position: absolute;
+            width: 10vh;
+            height: 10vh;
+            bottom: 1vh;
+            left: 2vh;
+            border-radius: 1vh;
+            background: linear-gradient(135deg, rgb(255, 255, 255), rgb(223, 223, 223), rgb(211, 211, 211));
+            z-index: 3;
+            box-shadow: inset 1vh 1vh 2vh rgba(0, 0, 0, 0.3),
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.25);
+        }
+
+        .hole-meter-circle {
+            position: absolute;
+            width: 9vh;
+            height: 9vh;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgb(190, 190, 190), rgb(223, 223, 223), rgb(153, 153, 153));
+            z-index: 3;
+            box-shadow: inset 1vh 1vh 2vh rgba(0, 0, 0, 0.3),
+                0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.25);
+        }
+
+        .hole-circle {
+            position: absolute;
+            width: 1vh;
+            height: 1vh;
+            background: linear-gradient(135deg, rgb(255, 255, 255), rgb(172, 172, 172), rgb(209, 209, 209));
+            border-radius: 50%;
+            z-index: 3;
+            box-shadow: inset 0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.3);
+        }
+
+        .hole-circle.top-left {
+            top: 0.5vh;
+            left: 0.5vh;
+        }
+
+        .hole-circle.top-right {
+            top: 0.5vh;
+            right: 0.5vh;
+        }
+
+        .hole-circle.bottom-left {
+            bottom: 0.5vh;
+            left: 0.5vh;
+        }
+
+        .hole-circle.bottom-right {
+            bottom: 0.5vh;
+            right: 0.5vh;
+        }
+
+        .trapezoid {
+            position: absolute;
+            top: 1.5vh;
+            left: 16.5vh;
+            border-radius: 50%;
+            border: 0.125vh solid #3f3f3f;
+            transform: translateX(-50%);
+            width: 3vh;
+            height: 3vh;
+            background: linear-gradient(135deg, rgb(255, 255, 255), rgb(224, 224, 224), rgb(221, 221, 221));
+            box-shadow:
+                0.5vh 0.5vh 2vh rgba(0, 0, 0, 0.75);
+        }
+
+        .trapezoid2 {
+            position: absolute;
+            bottom: 0vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 38vh;
+            height: 6vh;
+            background: #adadad;
+            clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 100%);
+
+        }
+
+        .details {
+            position: absolute;
+            bottom: 2.5vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #000000;
+            font-size: 2.2vh;
+            letter-spacing: 0.2vh;
+            text-align: center;
+            z-index: 2;
+            white-space: nowrap;
+        }
+
+        .logo-year {
+            position: absolute;
+            top: 50%;
+            left: 19.5vh;
+            transform: translate(0%, -50%);
+            color: rgb(0, 0, 0);
+            font-family: 'Nixiebold-slim', Arial, sans-serif;
+            font-size: 1.5vh;
+            letter-spacing: 0.5vh;
+            opacity: 0.75;
+            z-index: 99;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cassette">
+        <div class="logo-year">1962</div>
+        <div class="bottom-label"></div>
+        <div class="bottom-3rec">
+            <div class="bottom-rec1"></div>
+            <div class="bottom-rec2"></div>
+            <div class="bottom-rec3"></div>
+        </div>
+        <div class="plugin-sliver"></div>
+        <div class="plugin-sliver" style="left: 7vh;"></div>
+        <div class="green-but">
+            <div class="bottom-green"></div>
+            <div class="bottom-green"></div>
+            <div class="bottom-green"></div>
+            <div class="bottom-green"></div>
+            <div class="bottom-green"></div>
+            <div class="bottom-green"></div>
+            <div class="bottom-green"></div>
+        </div>
+        <div class="green-but" style="left: 28.25vh;">
+            <div class="bottom-green"></div>
+            <div class="bottom-green"></div>
+            <div class="bottom-green"></div>
+            <div class="bottom-green"></div>
+            <div class="bottom-green"></div>
+            <div class="bottom-green"></div>
+        </div>
+        <div class="bottom-screw" style="top: 22vh;left: 2.5vh;transform: translate(0, -50%) rotate(-11.5deg);">
+            <div class="bottom-circle"></div>
+        </div>
+        <div class="bottom-screw" style="top: 33vh;left: 4.5vh;transform: translate(0, -50%) rotate(-21.5deg);">
+            <div class="bottom-circle"></div>
+        </div>
+        <div class="bottom-screw" style="top: 43.25vh;left: 8.75vh;transform: translate(0, -50%) rotate(-5.5deg);">
+            <div class="bottom-circle"></div>
+        </div>
+        <div class="bottom-whitelong" style="top: 44.75vh;left: 8.75vh;transform: translate(0, -50%) rotate(-21.5deg);">
+            <div class="hole-circle" style="top:50%;left: 1vh;transform: translate(0, -50%) rotate(-21.5deg);"></div>
+            <div class="bottom-screw" style="top: 50%;left: 5.5vh;transform: translate(0%, -50%) rotate(-185.5deg);">
+                <div class="bottom-circle" style="top: 50%;left: 50%;transform: translate(-50%, -50%) rotate(-5.5deg);">
+                </div>
+            </div>
+        </div>
+        <div class="bottom-whitelong"
+            style="width: 9vh;top: 36.25vh;left: -2vh;transform: translate(0, -50%) rotate(270deg);z-index: -3;">
+            <div class="bottom-screw" style="top: 50%;left: 0vh;transform: translate(0%, -50%) rotate(-185.5deg);">
+                <div class="bottom-circle" style="top: 50%;left: 50%;transform: translate(-50%, -50%) rotate(-5.5deg);">
+                </div>
+            </div>
+        </div>
+        <div class="bottom-whitelong"
+            style="width: 7vh;top: 5.5vh;left: 7vh;transform: translate(0, -50%) rotate(-192deg);z-index: -3;">
+            <div class="bottom-screw" style="top: 50%;left: 0vh;transform: translate(0%, -50%) rotate(-185.5deg);">
+                <div class="bottom-circle" style="top: 50%;left: 50%;transform: translate(-50%, -50%) rotate(-5.5deg);">
+                </div>
+            </div>
+        </div>
+        <div class="bottom-white" style="top: 49.75vh;left: 10.75vh;transform: translate(0, -50%) rotate(-64.5deg);">
+            <div class="bottom-screw" style="top: 50%;left: 0.5vh;transform: translate(0%, -50%) rotate(-5.5deg);">
+                <div class="bottom-circle" style="top: 50%;left: 50%;transform: translate(-50%, -50%) rotate(-5.5deg);">
+                </div>
+            </div>
+        </div>
+        <div class="bottom-whiteup" style="top: 10.5vh;left: 3vh;transform: translate(0, -50%) rotate(5.5deg);">
+            <div class="bottom-screw" style="top: -0.35vh;left: 1.75vh;scale: 50%;">
+            </div>
+        </div>
+        <div class="bottom-whiteup" style="top: 43.5vh;left: -0.5vh;transform: translate(0, -50%) rotate(90deg);"></div>
+        <div class="bottom-whiteup"
+            style="width: 15vh;height: 1vh;top: 50%;left: 41vh;transform: translate(0, -50%) rotate(90deg);"></div>
+        <div class="corner-circle top-left"></div>
+        <div class="corner-circle top-right"></div>
+        <div class="corner-circle bottom-left"></div>
+        <div class="corner-circle bottom-right"></div>
+        <div class="hole-meter">
+            <div class="hole-meter-circle"></div>
+            <div class="hole-circle top-left"></div>
+            <div class="hole-circle top-right"></div>
+            <div class="hole-circle bottom-left"></div>
+            <div class="hole-circle bottom-right"></div>
+        </div>
+        <div class="reelred left">
+            <div class="rectangles">
+                <div class="rectangle-group">
+                    <div class="rectangle"></div>
+                    <div class="rectangle"></div>
+                    <div class="rectangle"></div>
+                </div>
+            </div>
+            <div class="center-hole"></div>
+        </div>
+        <div class="reel-center left">
+            <div class="reel-center-rec">
+                <div class="bottom-screw"
+                    style="transform-origin: center;top: 50%;left: 50%;transform: translate(-50%, -50%) rotate(-5.5deg);">
+                    <div class="bottom-circle"
+                        style="top: 50%;left: 50%;transform: translate(-50%, -50%) rotate(-5.5deg);"></div>
+                    <div class="hole-circle" style="top: 50%;left: 3vh;transform: translate(0%, -50%) rotate(-5.5deg);">
+                    </div>
+                    <div class="hole-circle"
+                        style="top: 50%;right: 3vh;transform: translate(0%, -50%) rotate(-5.5deg);"></div>
+                </div>
+            </div>
+        </div>
+        <div class="reelref left "></div>
+        <div class="reelblue right">
+            <div class="rectangles">
+                <div class="rectangle-group2">
+                    <div class="rectangle2"></div>
+                    <div class="rectangle2"></div>
+                    <div class="rectangle2"></div>
+                    <div class="rectangle2"></div>
+                    <div class="rectangle2"></div>
+                    <div class="rectangle2"></div>
+                </div>
+            </div>
+            <div class="center-hole2"></div>
+        </div>
+        <div class="reel-center right">
+            <div class="reel-center-rec">
+                <div class="bottom-screw"
+                    style="transform-origin: center;top: 50%;left: 50%;transform: translate(-50%, -50%) rotate(-5.5deg);">
+                    <div class="bottom-circle"
+                        style="top: 50%;left: 50%;transform: translate(-50%, -50%) rotate(-5.5deg);"></div>
+                    <div class="hole-circle"
+                        style="top: 50%;left: 3vh;transform: translate(0%, -50%) rotate(-5.5deg);"></div>
+                    <div class="hole-circle"
+                        style="top: 50%;right: 3vh;transform: translate(0%, -50%) rotate(-5.5deg);"></div>
+                </div>
+            </div>
+        </div>
+        <div class="reelref right "></div>
+
+        <div class="tape-window">
+            <div class="tape-roll-left"></div>
+            <div class="tape-roll-right"></div>
+        </div>
+        <div class="composite-shape">
+            <div class="comp-rect"></div>
+            <div class="comp-circle left"></div>
+            <div class="comp-circle right"></div>
+            <div class="comp-circle right-needle"></div>
+        </div>
+        <div class="rec-shape" style="top: 36.5vh;left: 8.5vh;transform: translate(0, -50%) rotate(-21.5deg);">
+            <div class="rec-rect"></div>
+            <div class="rec-circle right-needle"></div>
+            <div class="hole-circle rec-top"></div>
+            <div class="hole-circle rec-bottom"></div>
+            <div class="hole-circle rec-center"></div>
+        </div>
+        <div class="rec-shape" style="top: 26.5vh;left: 5.5vh;transform: translate(0, -50%) rotate(-8.5deg);">
+            <div class="rec-rect"></div>
+            <div class="rec-circle right-needle"></div>
+            <div class="hole-circle rec-top"></div>
+            <div class="hole-circle rec-bottom"></div>
+            <div class="hole-circle rec-center"></div>
+        </div>
+        <div class="bla-shape" style="top: 17vh;left: 4vh;transform: translate(0, -50%) rotate(6.8deg);">
+            <div class="bla-rect"></div>
+            <div class="bla-circle right-needle"></div>
+            <div class="hole-circle bla-top"></div>
+            <div class="hole-circle bla-bottom"></div>
+        </div>
+        <div class="under-redcircle"></div>
+        <div class="under-black"></div>
+        <div class="under-half">
+            <div class="bottom-label" style="top: 9vh;left: -1.5vh;transform: translate(0, -50%);">
+                <div class="bottom-screw" style="top: 50%;left: 50%;transform: translate(-50%, -50%);"> </div>
+            </div>
+        </div>
+        <div class="under-half2" style="transform: translate(0, -50%) rotate(-39.48deg);">
+            <div class="hole-circle " style="top: 9vh;left: 9vh;scale: 1200%;z-index: -3;"></div>
+            <div class="bottom-screw" style="top: 6.75vh;left: 7vh;"> </div>
+            <div class="hole-circle" style="top: 7.5vh;left: 5vh;transform: translate(0, -50%);background: #777676;">
+            </div>
+        </div>
+        <div class="uu-half"></div>
+        <div class="uu-halff"></div>
+        <div class="uu-half2"></div>
+        <div class="uu-rec"></div>
+        <div class="trapezoid"></div>
+        <div class="trapezoid2"></div>
+        <div class="details">Nagra NS(1962)</div>
+    </div>
+</body>
+
+</html>

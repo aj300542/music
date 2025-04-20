@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sony-walkman</title>
+  <style>
+    ::-webkit-scrollbar {
+      display: none;
+      /* 隐藏滚动条 */
+    }
+
+    @font-face {
+      font-family: 'Nixiebold-slim';
+      src: url('fonts/Nixiebold-slim.woff2') format('woff2'),
+        url('fonts/Nixiebold-slim.woff') format('woff'),
+        url('fonts/Nixiebold-slim.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: rgb(0, 0, 0);
+      /* 网页背景色，用于镂空效果显示 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      /* 防止内容溢出 */
+    }
+
+    .walkman {
+      width: 30vh;
+      height: 45vh;
+      background: linear-gradient(135deg, #969696, #747474);
+      border-radius: 1vh;
+      box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .walkmanb {
+      width: 24vh;
+      height: 45vh;
+      background: linear-gradient(135deg, #b0c4de, #9dafc7, #456a88);
+      border-radius: 0.5vh;
+      position: absolute;
+      left: 0;
+      top: 0;
+      box-shadow: inset 0.25vh 0.25vh 1vh rgba(230, 230, 230, 0.6),
+        0.25vh 0.25vh 1vh rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .walkmanb-fill {
+      width: 100%;
+      height: 100%;
+      background: black;
+      -webkit-mask: url(#window-hole-mask);
+      mask: url(#window-hole-mask);
+      -webkit-mask-type: luminance;
+      mask-type: luminance;
+    }
+
+    .walkmanw {
+      width: 6vh;
+      height: 45vh;
+      background: linear-gradient(135deg, #dddddd, #9e9e93);
+      border-radius: 0.5vh;
+      position: absolute;
+      left: 24vh;
+      top: 0;
+    }
+
+    .logo {
+      position: absolute;
+      top: 38.5vh;
+      left: 3vh;
+      color: rgb(209, 209, 209);
+      font-size: 3vh;
+      font-weight: bold;
+    }
+
+    .logo-year {
+      position: absolute;
+      bottom: 1vh;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgb(209, 209, 209);
+      font-family: 'Nixiebold-slim', Arial, sans-serif;
+      color: rgb(255, 255, 255);
+      font-size: 1.5vh;
+      letter-spacing: 0.5vh;
+      /* 增加字符之间的间距 */
+      opacity: 0.75;
+    }
+
+    .logoA {
+      position: absolute;
+      top: 6.5vh;
+      left: 3vh;
+      color: rgb(209, 209, 209);
+      font-size: 3vh;
+      font-weight: bold;
+    }
+
+    .logoB {
+      position: absolute;
+      top: 20vh;
+      left: 17vh;
+      color: rgb(209, 209, 209);
+      font-size: 7vh;
+      font-weight: bold;
+      transform: rotate(180deg);
+    }
+
+    .cassette-window {
+      position: absolute;
+      top: 13vh;
+      left: 5vh;
+      width: 9.5vh;
+      height: 23vh;
+      border: 0.3vh solid #a5a5a5;
+      border-radius: 0.5vh;
+      background: black;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .cassette-window iframe {
+      position: absolute;
+      border: none;
+      top: 1vh;
+      left: -8vh;
+      transform: none;
+      z-index: 99;
+      opacity: 0.2;
+      overflow: hidden;
+      outline: none;
+      scale: 380%;
+    }
+
+    .cassette-fill {
+      width: 100%;
+      height: 100%;
+      background: black;
+      -webkit-mask: url(#window-hole-mask);
+      mask: url(#window-hole-mask);
+      -webkit-mask-type: luminance;
+      mask-type: luminance;
+    }
+
+    .button {
+      width: 4vh;
+      height: 1.5vh;
+      background: orange;
+      border: 0.3vh solid #a5a5a5;
+      border-radius: 0.1vh;
+      position: absolute;
+      bottom: 45vh;
+      left: 6vh;
+      font-family: 'Nixiebold-mini', Arial, sans-serif;
+      color: rgb(255, 255, 255);
+      font-size: 1.5vh;
+      font-weight: 100;
+    }
+
+    .buttonB {
+      width: 1vh;
+      height: 8vh;
+      background: rgb(158, 158, 158);
+      border: 0.3vh solid #a5a5a5;
+      border-radius: 0.1vh;
+      position: absolute;
+      bottom: 32vh;
+      left: 30vh;
+    }
+
+    .control-buttons {
+      display: flex;
+      justify-content: space-around;
+      width: 15vh;
+      position: absolute;
+      bottom: 18vh;
+      left: 18vh;
+    }
+
+    .control-buttons .circle {
+      width: 2vh;
+      height: 2vh;
+      background: #c2c2c2;
+      border-radius: 50%;
+      box-shadow: inset 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SVG mask 定义：整个区域白色，再在中间绘制较大的黑色区域作为镂空 -->
+  <svg width="0" height="0">
+    <defs>
+      <mask id="window-hole-mask" maskUnits="objectBoundingBox">
+        <rect x="0" y="0" width="1" height="1" fill="white" />
+        <!-- 此处设为 cassette-window 及 walkmanb 内部镂空区域，左右各留 10% -->
+        <rect x="0.1" y="0.1" width="0.8" height="0.8" fill="black" />
+      </mask>
+    </defs>
+  </svg>
+
+  <div class="walkman">
+
+    <div class="walkmanb">
+      <div class="logo-year">1979</div>
+      <div class="walkmanb-fill"></div>
+    </div>
+
+    <div class="walkmanw"></div>
+    <div class="logo">WALKMAN</div>
+    <div class="logoA">--TPS-L2--</div>
+    <div class="logoB">⇩</div>
+    <div class="cassette-window">
+      <iframe src="cassette-90.html"></iframe>
+      <div class="cassette-fill"></div>
+    </div>
+    <div class="button"></div>
+    <div class="buttonB"></div>
+    <div class="control-buttons">
+      <div class="circle"></div>
+    </div>
+  </div>
+</body>
+
+</html>
