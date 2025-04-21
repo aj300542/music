@@ -130,18 +130,27 @@
       z-index: 2;
       overflow: hidden;
     }
-
-    .cassette-window iframe {
-      position: absolute;
-      border: none;
-      top: 1vh;
-      left: -8vh;
-      transform: none;
-      z-index: 99;
-      opacity: 0.2;
+    .cassette-ww {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-40%, -132.5%); 
+      width: 30vh;
+      height: 30vh;
+      border-radius: 0.5vh;
+      background: transparent;
+      z-index: 2;
       overflow: hidden;
+    }
+    .cassette-ww iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      scale: 2.1; /* 缩小 scale 比例 */
+      max-width: 100%; /* 限制宽度 */
+      max-height: 100%; /* 限制高度 */
+      opacity: 0.45;
       outline: none;
-      scale: 380%;
     }
 
     .cassette-fill {
@@ -223,8 +232,10 @@
     <div class="logoA">--TPS-L2--</div>
     <div class="logoB">⇩</div>
     <div class="cassette-window">
-      <iframe src="cassette-90.html"></iframe>
       <div class="cassette-fill"></div>
+      <div class="cassette-ww">
+        <iframe src="cassette-90.html"></iframe>
+      </div>
     </div>
     <div class="button"></div>
     <div class="buttonB"></div>
